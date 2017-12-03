@@ -11,7 +11,5 @@ public class DeskManager {
 	public static void main(String[] args) {
 		System.out.println("Hello World !!!");
 		Agent a = new Agent();
-		a.addBehaviour(null);
 	}
-
 }
