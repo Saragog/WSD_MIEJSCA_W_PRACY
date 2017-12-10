@@ -4,6 +4,7 @@
  * This class creates all the agents and starts the program
  */
 
+import jade.Boot;
 import jade.core.Agent;
 
 public class DeskManager {
@@ -11,6 +12,9 @@ public class DeskManager {
 	public static void main(String[] args) {
 		System.out.println("Hello World !!!");
 		Agent a = new Agent();
+		
+		Boot boot = new Boot();
+		
 	}
 }
 //test2
