@@ -1,6 +1,7 @@
 package behaviours;
 
 import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
 
 public class ExampleBehaviour extends CyclicBehaviour{
 	
@@ -10,7 +11,18 @@ public class ExampleBehaviour extends CyclicBehaviour{
 	private static final long serialVersionUID = 1L;
 
 	public void action() {
-		 // perform operation X
-		 }
+		ACLMessage msg = myAgent.receive();
+		if (msg != null	) 
+		{
+			
+			System.out.println("wiadomosc: "+msg.getContent());
+		
+		}
+		else
+		{
+			block();
+		}        
+		
+	}
 	 
 }
