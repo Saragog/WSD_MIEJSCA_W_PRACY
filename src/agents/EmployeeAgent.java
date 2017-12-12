@@ -15,8 +15,11 @@ public class EmployeeAgent extends Agent{
 		msg.setOntology("OntologiaPrawdy");
 		//msg.setPerformative(perf);
 		msg.setContent("tresc testowa");
-		
 		send(msg);
+		
+		addBehaviour(new employeeBehaviours.priceAsk());
+		
+		addBehaviour(new employeeBehaviours.Bid());
 		
 	}
 }
