@@ -8,6 +8,9 @@ import jade.lang.acl.ACLMessage;
 
 public class EmployeeAgent extends Agent{
 	protected void setup() {
+		
+		addBehaviour(new behaviours.EmployeeBehaviour());
+		
 		System.out.println("Siema tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.addReceiver(new AID("Miejsce do siedzenia na tylku1",AID.ISLOCALNAME));

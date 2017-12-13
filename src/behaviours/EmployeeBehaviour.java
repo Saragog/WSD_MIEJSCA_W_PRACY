@@ -3,8 +3,8 @@ package behaviours;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
-public class ExampleBehaviour extends CyclicBehaviour{
-	
+public class EmployeeBehaviour extends CyclicBehaviour{
+
 	 /**
 	 * 
 	 */
@@ -24,5 +24,5 @@ public class ExampleBehaviour extends CyclicBehaviour{
 		}        
 		
 	}
-	 
+	
 }
