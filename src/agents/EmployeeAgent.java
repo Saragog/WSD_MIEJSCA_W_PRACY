@@ -13,13 +13,13 @@ public class EmployeeAgent extends Agent{
 		
 		System.out.println("Siema tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.addReceiver(new AID("Miejsce do siedzenia na tylku1",AID.ISLOCALNAME));
+		msg.addReceiver(new AID("Miejsce do pracy ",AID.ISLOCALNAME));
 		msg.setLanguage("jezykWSD");
 		msg.setOntology("OntologiaPrawdy");
 		//msg.setPerformative(perf);
 		msg.setContent("tresc testowa");
-		
 		send(msg);
+		
 		
 	}
 }
