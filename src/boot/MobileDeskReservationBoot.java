@@ -26,6 +26,8 @@ public class MobileDeskReservationBoot {
 	    
 	    initpreferredDesksIndices(1, preferredDesksIndices);
 	    
+	    initAllDesks(allDesks);
+	    
 	    /*-------------------------
 	     * Tworzenie agentow biurek
 	     * ------------------------*/
@@ -34,9 +36,8 @@ public class MobileDeskReservationBoot {
 	    	AgentController deskAgentController;
 	        try
 	        {
-	        	deskAgentController = containerController.createNewAgent("Biurko"+i, "agents.DeskAgent", null);
+	        	deskAgentController = containerController.createNewAgent(allDesks[i-1].toString(), "agents.DeskAgent", allDesks);
 	            deskAgentController.start();
-	            allDesks[i-1] = new AID("Biurko"+i,AID.ISLOCALNAME);
 	        }
 	        catch (StaleProxyException e)
 	        {
@@ -62,6 +63,16 @@ public class MobileDeskReservationBoot {
 	        }
 	    }
 	    
+	}
+	
+	/*-------------------------
+	 * Tablica z AID wyszstkich biurek.
+	 * Tworzona jest jeszcze przed powołaniem do życia agentów.
+	 * -----------------------*/
+	private static void initAllDesks(AID[] allDesks) {
+		for(int i=1; i<=4; i++) {
+			allDesks[i-1] = new AID("Biurko"+i,AID.ISLOCALNAME);
+		}
 	}
 
 	/*-------------------------
