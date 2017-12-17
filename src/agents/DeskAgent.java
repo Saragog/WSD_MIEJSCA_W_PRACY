@@ -18,6 +18,8 @@ public class DeskAgent extends Agent {
 
 	private int currentPrice;
 	private DeskState state;
+
+
 	private List<AID> employeeList; 
 	/* 
 	 * Pytanie: Jakie informacje o sobie i o innych agentach
@@ -42,6 +44,12 @@ public class DeskAgent extends Agent {
 		this.currentPrice = currentPrice;
 	}
 	
-	
+	public DeskState getDeskState() {
+		return state;
+	}
+
+	public void setDeskState(DeskState state) {
+		this.state = state;
+	}
 
 }
