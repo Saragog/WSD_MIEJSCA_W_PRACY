@@ -7,8 +7,6 @@ import agents.EmployeeState;
 
 import java.util.HashMap;
 
-import com.sun.javafx.collections.MappingChange.Map;
-
 import agents.*;
 
 public class EmployeeBehaviour extends CyclicBehaviour{
