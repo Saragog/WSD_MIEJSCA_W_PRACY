@@ -31,7 +31,7 @@ public class DeskAgent extends Agent {
 	
 	protected void setup() {
 		Object[] args = getArguments();
-		allDesks = (AID[])args[1];
+		allDesks = (AID[])args[0];
 		this.currentPrice = 0;
 		this.state = DeskState.FREE;
 		employeeList = new LinkedList<AID>();

@@ -18,6 +18,7 @@ public class MobileDeskReservationBoot {
 	    profile.setParameter(Profile.GUI, "true");
 	    ContainerController containerController = runtime.createMainContainer(profile);
 	    Object[] employeeArgs = new Object[2];	//liczba argumentow odbieranych przez pracownika
+	    Object[] deskArgs = new Object[1];
 	    AID[] allDesks = new AID[4];	// identyfikatory biurek 
 	    AID[] preferredDesksIndices = new AID[4];	// identyfikatory biurek preferowanych przez pracownika
 	    //wypelnic 
@@ -25,6 +26,7 @@ public class MobileDeskReservationBoot {
 	    employeeArgs[1] = preferredDesksIndices;
 	    	    
 	    initAllDesks(allDesks);
+	    deskArgs[0] = allDesks;
 	    
 	    /*-------------------------
 	     * Tworzenie agentow biurek
@@ -34,7 +36,7 @@ public class MobileDeskReservationBoot {
 	    	AgentController deskAgentController;
 	        try
 	        {
-	        	deskAgentController = containerController.createNewAgent(allDesks[i-1].toString(), "agents.DeskAgent", allDesks);
+	        	deskAgentController = containerController.createNewAgent(allDesks[i-1].toString(), "agents.DeskAgent", deskArgs);
 	            deskAgentController.start();
 	        }
 	        catch (StaleProxyException e)
