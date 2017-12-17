@@ -17,7 +17,7 @@ public class MobileDeskReservationBoot {
 	    profile.setParameter(Profile.GUI, "true");
 	    ContainerController containerController = runtime.createMainContainer(profile);
   
-	    for(int i=1; i<6; i++)
+	    for(int i=1; i<2; i++)
 	    {
 	    	AgentController deskAgentController;
 	    	AgentController employeeAgentController;
