@@ -1,5 +1,6 @@
 package boot;
 
+import jade.core.AID;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -16,6 +17,13 @@ public class MobileDeskReservationBoot {
 	    profile.setParameter(Profile.MAIN_HOST, "localhost");
 	    profile.setParameter(Profile.GUI, "true");
 	    ContainerController containerController = runtime.createMainContainer(profile);
+	    Object[] employeeArgs = new Object[2];
+	    AID[] allDesks = new AID[2];
+	    int[] preferredDesksIndices = new int[4];
+	    //wypelnic 
+	    employeeArgs[0] = allDesks;
+	    employeeArgs[1] = preferredDesksIndices;
+	    
   
 	    for(int i=1; i<2; i++)
 	    {
@@ -23,9 +31,9 @@ public class MobileDeskReservationBoot {
 	    	AgentController employeeAgentController;
 	        try
 	        {
-	        	deskAgentController = containerController.createNewAgent("Miejsce do pracy "+i, "agents.DeskAgent", null);
+	        	deskAgentController = containerController.createNewAgent("Biurko"+i, "agents.DeskAgent", null);
 	            deskAgentController.start();    
-	            employeeAgentController = containerController.createNewAgent("Pracownik" + i, "agents.EmployeeAgent", null);
+	            employeeAgentController = containerController.createNewAgent("Pracownik" + i, "agents.EmployeeAgent", employeeArgs);
 	            employeeAgentController.start();
 	        }
 	        catch (StaleProxyException e)
