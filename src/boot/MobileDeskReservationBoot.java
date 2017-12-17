@@ -19,13 +19,11 @@ public class MobileDeskReservationBoot {
 	    ContainerController containerController = runtime.createMainContainer(profile);
 	    Object[] employeeArgs = new Object[2];	//liczba argumentow odbieranych przez pracownika
 	    AID[] allDesks = new AID[4];	// identyfikatory biurek 
-	    int[] preferredDesksIndices = new int[4];	// identyfikatory biurek preferowanych przez pracownika
+	    AID[] preferredDesksIndices = new AID[4];	// identyfikatory biurek preferowanych przez pracownika
 	    //wypelnic 
 	    employeeArgs[0] = allDesks;
 	    employeeArgs[1] = preferredDesksIndices;
-	    
-	    initpreferredDesksIndices(1, preferredDesksIndices);
-	    
+	    	    
 	    initAllDesks(allDesks);
 	    
 	    /*-------------------------
@@ -53,7 +51,7 @@ public class MobileDeskReservationBoot {
 	    	AgentController employeeAgentController;
 	        try
 	        {
-	        	initpreferredDesksIndices(i, preferredDesksIndices); // nadawanie preferencji pracownikom
+	        	initpreferredDesksIndices(i, allDesks, preferredDesksIndices); // nadawanie preferencji pracownikom
 	        	employeeAgentController = containerController.createNewAgent("Pracownik" + i, "agents.EmployeeAgent", employeeArgs);
 	            employeeAgentController.start();
 	        }
@@ -78,22 +76,22 @@ public class MobileDeskReservationBoot {
 	/*-------------------------
 	 * Preferencje pracownikow.
 	 * -----------------------*/
-	private static void initpreferredDesksIndices(int option, int[] preferredDesksIndices) {
+	private static void initpreferredDesksIndices(int option, AID[] allDesks, AID[] preferredDesksIndices) {
 		switch (option) {
 			case 1: 
 			{
-				preferredDesksIndices[0] = 1;
-				preferredDesksIndices[1] = 2;
-				preferredDesksIndices[2] = 3;
-				preferredDesksIndices[3] = 4;
+				preferredDesksIndices[0] = allDesks[0];
+				preferredDesksIndices[1] = allDesks[1];
+				preferredDesksIndices[2] = allDesks[2];
+				preferredDesksIndices[3] = allDesks[3];
 				break;
 			}
 			case 2:
 			{
-				preferredDesksIndices[0] = 2;
-				preferredDesksIndices[1] = 1;
-				preferredDesksIndices[2] = 3;
-				preferredDesksIndices[3] = 4;
+				preferredDesksIndices[0] = allDesks[1];
+				preferredDesksIndices[1] = allDesks[0];
+				preferredDesksIndices[2] = allDesks[2];
+				preferredDesksIndices[3] = allDesks[3];
 				break;
 			}
 			
