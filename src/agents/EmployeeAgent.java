@@ -1,5 +1,6 @@
 package agents;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import jade.core.AID;
@@ -16,21 +17,18 @@ public class EmployeeAgent extends Agent{
 	private static final long serialVersionUID = 1L;
 	private int amountOfMoney;
 	private EmployeeState state;
-	private AID[] preferredDesks;
+	private int[] preferredDesksIndices;
+	private AID[] allDesks;
 	private Map<AID, Integer> desksPrices;
-	
-	public EmployeeAgent(int[] preferredDesksIndices, AID[] allDesks)
-	{
-		super();
-		
-	}
-	
 	
 	protected void setup() { // Jako 1 argument AID z preferowanymi stolami 2 argument to AID wszystkich biurek
 		
 		Object[] args = getArguments();
 		
-		int[] preferredDesksIndices = args[0];
+		preferredDesksIndices = (int[])args[0];
+		allDesks = (AID[])args[1];
+		
+		desksPrices = new HashMap<AID, Integer> ();
 		
 		this.state = EmployeeState.HAS_NO_DESK_TAKEN;
 		
@@ -46,6 +44,50 @@ public class EmployeeAgent extends Agent{
 		send(msg);
 		
 		
+	}
+
+	public int getAmountOfMoney() {
+		return amountOfMoney;
+	}
+
+	public void setAmountOfMoney(int amountOfMoney) {
+		this.amountOfMoney = amountOfMoney;
+	}
+
+	public EmployeeState getEmployeeState() {
+		return state;
+	}
+
+	public void setEmployeeState(EmployeeState state) {
+		this.state = state;
+	}
+
+	public int[] getPreferredDesksIndices() {
+		return preferredDesksIndices;
+	}
+
+	public void setPreferredDesksIndices(int[] preferredDesksIndices) {
+		this.preferredDesksIndices = preferredDesksIndices;
+	}
+
+	public AID[] getAllDesks() {
+		return allDesks;
+	}
+
+	public void setAllDesks(AID[] allDesks) {
+		this.allDesks = allDesks;
+	}
+
+	public Map<AID, Integer> getDesksPrices() {
+		return desksPrices;
+	}
+
+	public void setDesksPrices(Map<AID, Integer> desksPrices) {
+		this.desksPrices = desksPrices;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 }
