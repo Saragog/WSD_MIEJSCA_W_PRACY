@@ -57,7 +57,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 					String[] contentsParts = messageContent.split(":");
 					AID sender = msg.getSender();
 					if (contentsParts[0] == "price")
-						
+						reakcjaNaZmianeCeny(sender, Integer.parseInt(contentsParts[1]));
 					
 
 					System.out.println("wiadomosc: "+msg.getContent());
@@ -81,8 +81,8 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	
 	private void makeOffer()
 	{
-		int[] ((EmployeeAgent)myAgent).getPreferredDesksIndices();
-		int[] zValues = new int[]
+		//int[] ((EmployeeAgent)myAgent).getPreferredDesksIndices();
+		//int[] zValues = new int[]
 	}
 	
 	private void reakcjaNaZmianeCeny(AID sender, int price)
@@ -101,14 +101,14 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	
 	private void askPreferredDesksAboutPrice()
 	{
-		int[] preferredDesks = ((EmployeeAgent)myAgent).getPreferredDesksIndices();
-		int preferredDesksCount = preferredDesks.length;
+		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
 		AID[] allDesks = ((EmployeeAgent)myAgent).getAllDesks();
+		int preferredDesksCount = allDesks.length;
 		
 		String content = "priceQuestion";
 		
 		for (int x = 0; x < preferredDesksCount; x++)
-			sendMessage(allDesks[preferredDesks[x]], content, ACLMessage.INFORM_REF);
+			sendMessage(preferredDesksAIDs[x], content, ACLMessage.INFORM_REF);
 		
 		priceResponseCounter = preferredDesksCount;
 	}
