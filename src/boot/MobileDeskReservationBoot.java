@@ -23,7 +23,7 @@ public class MobileDeskReservationBoot {
 	    	AgentController employeeAgentController;
 	        try
 	        {
-	        	deskAgentController = containerController.createNewAgent("Miejsce do siedzenia na tylku"+i, "agents.DeskAgent", null);
+	        	deskAgentController = containerController.createNewAgent("Miejsce do pracy "+i, "agents.DeskAgent", null);
 	            deskAgentController.start();    
 	            employeeAgentController = containerController.createNewAgent("Pracownik" + i, "agents.EmployeeAgent", null);
 	            employeeAgentController.start();
