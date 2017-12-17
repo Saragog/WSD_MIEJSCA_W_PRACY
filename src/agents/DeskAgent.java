@@ -35,7 +35,7 @@ public class DeskAgent extends Agent {
 		this.currentPrice = 0;
 		this.state = DeskState.FREE;
 		employeeList = new LinkedList<AID>();
-		System.out.println("Siema tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
+		System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
 		addBehaviour(new behaviours.DeskBehaviour());
 		
 	}

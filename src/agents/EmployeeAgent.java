@@ -35,16 +35,7 @@ public class EmployeeAgent extends Agent{
 		
 		addBehaviour(new behaviours.EmployeeBehaviour());
 		
-		System.out.println("Siema tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
-		ACLMessage msg = new ACLMessage(ACLMessage.QUERY_REF);
-		msg.addReceiver(new AID("Miejsce do pracy 1",AID.ISLOCALNAME));
-		msg.setLanguage("jezykWSD");
-		msg.setOntology("OntologiaPrawdy");
-		//msg.setPerformative(perf);
-		msg.setContent("tresc testowa");
-		send(msg);
-		
-		
+		System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
 	}
 
 	public int getAmountOfMoney() {

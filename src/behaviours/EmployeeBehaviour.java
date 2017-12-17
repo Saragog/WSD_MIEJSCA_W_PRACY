@@ -23,6 +23,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		
 		
 		EmployeeState agentState = ((EmployeeAgent)myAgent).getEmployeeState();
+		String agentName = myAgent.getAID().getName();
 		
 		switch(agentState)
 		{
@@ -50,17 +51,17 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			case WAITING_FOR_PRICE_RESPONSES:
 			{
 				ACLMessage msg = myAgent.receive();
-				String messageContent = msg.getContent();
 				
 				if (msg != null	) 
 				{
+					String messageContent = msg.getContent();
 					String[] contentsParts = messageContent.split(":");
 					AID sender = msg.getSender();
 					if (contentsParts[0] == "price")
 						reakcjaNaZmianeCeny(sender, Integer.parseInt(contentsParts[1]));
 					
 
-					System.out.println("wiadomosc: "+msg.getContent());
+					System.out.println(agentName + " otrzymal wiadomosc: "+msg.getContent());
 					
 				}
 				else
@@ -111,6 +112,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			sendMessage(preferredDesksAIDs[x], content, ACLMessage.INFORM_REF);
 		
 		priceResponseCounter = preferredDesksCount;
+		((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.WAITING_FOR_PRICE_RESPONSES);
 	}
 	
 	private void sendMessage(AID receiver, String content, int performative)

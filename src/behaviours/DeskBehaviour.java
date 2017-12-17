@@ -19,26 +19,23 @@ public class DeskBehaviour extends CyclicBehaviour{
 		int performative;
 		DeskState agentState = ((DeskAgent)myAgent).getDeskState();
 		AID sender;		
+		String agentName = myAgent.getAID().getName();
 		
 		if (msg != null	) 
 		{
-			//System.out.println("wiadomosc: "+msg.getContent());
-			//System.out.println("wiadomosc: "+msg.getPerformative());
-			//System.out.println("wiadomosc: "+msg.getSender());
 			content = msg.getContent();
 			performative = msg.getPerformative();
 			sender = msg.getSender();
-
+			
 			switch (agentState)
 			{
 				case FREE:
 				{
 
-					System.out.println("Obecna cena to: " + ((DeskAgent)myAgent).getCurrentPrice());
-					System.out.println("Otrzymane od: " + sender);
+					System.out.println(agentName + "Obecna cena to: " + ((DeskAgent)myAgent).getCurrentPrice());
 										
-					sendMessage(new AID("Pracownik1",AID.ISLOCALNAME),
-							    Integer.toString(((DeskAgent)myAgent).getCurrentPrice()));
+					sendMessage(sender,
+							    "price:"+Integer.toString(((DeskAgent)myAgent).getCurrentPrice()));
 					
 				
 				}
@@ -61,8 +58,6 @@ public class DeskBehaviour extends CyclicBehaviour{
 	{
 		ACLMessage messageToBeSent = new ACLMessage(ACLMessage.INFORM_REF);
 		messageToBeSent.addReceiver(receiver);
-		//messageToBeSent.setLanguage("jezykWSD");
-		//messageToBeSent.setOntology("OntologiaPrawdy");
 		messageToBeSent.setContent(content);		
 		myAgent.send(messageToBeSent);
 	}
