@@ -35,16 +35,14 @@ public class DeskBehaviour extends CyclicBehaviour{
 					System.out.println(agentName + "Obecna cena to: " + ((DeskAgent)myAgent).getCurrentPrice());
 										
 					sendMessage(sender,
-							    "price:"+Integer.toString(((DeskAgent)myAgent).getCurrentPrice()));
-					
-				
+							    "price:"+Integer.toString(((DeskAgent)myAgent).getCurrentPrice()),
+							    ACLMessage.INFORM_REF);
 				}
 				case TAKEN:
 				{
-					
+					// TODO
+					// Lots of work to do in this class - for now we implement employee
 				}
-
-				
 			};
 		}
 		else
@@ -54,9 +52,9 @@ public class DeskBehaviour extends CyclicBehaviour{
 		
 	}
 	 
-	private void sendMessage(AID receiver, String content)
+	private void sendMessage(AID receiver, String content, int performative)
 	{
-		ACLMessage messageToBeSent = new ACLMessage(ACLMessage.INFORM_REF);
+		ACLMessage messageToBeSent = new ACLMessage(performative);
 		messageToBeSent.addReceiver(receiver);
 		messageToBeSent.setContent(content);		
 		myAgent.send(messageToBeSent);
