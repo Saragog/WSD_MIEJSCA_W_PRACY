@@ -36,7 +36,7 @@ public class MobileDeskReservationBoot {
 	    	AgentController deskAgentController;
 	        try
 	        {
-	        	deskAgentController = containerController.createNewAgent(allDesks[i-1].toString(), "agents.DeskAgent", deskArgs);
+	        	deskAgentController = containerController.createNewAgent("Biurko" + i, "agents.DeskAgent", deskArgs);
 	            deskAgentController.start();
 	        }
 	        catch (StaleProxyException e)
