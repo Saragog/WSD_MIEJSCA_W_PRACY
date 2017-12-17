@@ -70,8 +70,19 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				
 				break;
 			}
+			case CALCULATING_NEW_OFFER:
+			{
+				makeOffer();				
+				break;
+			}
 		}    
 		
+	}
+	
+	private void makeOffer()
+	{
+		int[] ((EmployeeAgent)myAgent).getPreferredDesksIndices();
+		int[] zValues = new int[]
 	}
 	
 	private void reakcjaNaZmianeCeny(AID sender, int price)
@@ -79,10 +90,9 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		HashMap<AID, Integer> prices = (HashMap<AID, Integer>) ((EmployeeAgent)myAgent).getDesksPrices();
 		if (prices.containsKey(sender))
 			prices.put(sender, price);
-		
-		// zmiana licznika i ewentualnie stanu
-		
+				
 		// TODO zrobic response na doslanie ceny ack ok
+		sendMessage(sender, "ackOk", ACLMessage.INFORM);
 		
 		priceResponseCounter--;
 		if (priceResponseCounter < 1)

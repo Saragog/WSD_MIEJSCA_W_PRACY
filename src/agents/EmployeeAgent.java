@@ -17,7 +17,8 @@ public class EmployeeAgent extends Agent{
 	private static final long serialVersionUID = 1L;
 	private int amountOfMoney;
 	private EmployeeState state;
-	private int[] preferredDesksIndices;
+	// private int[] preferredDesksIndices;
+	private AID[] preferredDesksAIDs;
 	private AID[] allDesks;
 	private Map<AID, Integer> desksPrices;
 	
@@ -25,7 +26,7 @@ public class EmployeeAgent extends Agent{
 		
 		Object[] args = getArguments();
 		
-		preferredDesksIndices = (int[])args[0];
+		preferredDesksAIDs = (AID[])args[0];
 		allDesks = (AID[])args[1];
 		
 		desksPrices = new HashMap<AID, Integer> ();
@@ -62,12 +63,12 @@ public class EmployeeAgent extends Agent{
 		this.state = state;
 	}
 
-	public int[] getPreferredDesksIndices() {
-		return preferredDesksIndices;
+	public AID[] getPreferredDesksAIDs() {
+		return preferredDesksAIDs;
 	}
 
-	public void setPreferredDesksIndices(int[] preferredDesksIndices) {
-		this.preferredDesksIndices = preferredDesksIndices;
+	public void setPreferredDesksAIDs(AID[] preferredDesksIndices) {
+		this.preferredDesksAIDs = preferredDesksIndices;
 	}
 
 	public AID[] getAllDesks() {
