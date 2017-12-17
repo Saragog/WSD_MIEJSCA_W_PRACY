@@ -2,6 +2,8 @@ package behaviours;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
+import agents.EmployeeState;
+import agents.*;
 
 public class EmployeeBehaviour extends CyclicBehaviour{
 
@@ -12,16 +14,29 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 
 	public void action() {
 		ACLMessage msg = myAgent.receive();
-		if (msg != null	) 
-		{
-			
-			System.out.println("wiadomosc: "+msg.getContent());
 		
-		}
-		else
+		EmployeeState agentState = ((EmployeeAgent)myAgent).getEmployeeState();
+		
+		switch(agentState)
 		{
-			block();
-		}        
+			case HAS_NO_DESK_TAKEN:
+			{
+				
+			}
+			case HAS_DESK_TAKEN:
+			{
+				if (msg != null	) 
+				{
+			
+					System.out.println("wiadomosc: "+msg.getContent());
+				
+				}
+				else
+				{
+					block();
+				} 
+			}
+		}    
 		
 	}
 	
