@@ -20,12 +20,19 @@ public class EmployeeAgent extends Agent{
 	// private int[] preferredDesksIndices;
 	private AID[] preferredDesksAIDs;
 	private AID[] allDesks;
+	private int[] maxDeskPrices;
 	private Map<AID, Integer> desksPrices;
+	
+	private static int MAX_DESK_PRICE_BEST = 100;
+	private static int MAX_DESK_PRICE_SECOND = 75;
+	private static int MAX_DESK_PRICE_THIRD = 50;
+	private static int MAX_DESK_PRICE_FOURTH = 25;
+
 	
 	protected void setup() { // Jako 1 argument AID z preferowanymi stolami 2 argument to AID wszystkich biurek
 		
 		Object[] args = getArguments();
-		
+				
 		preferredDesksAIDs = (AID[])args[0];
 		allDesks = (AID[])args[1];
 		

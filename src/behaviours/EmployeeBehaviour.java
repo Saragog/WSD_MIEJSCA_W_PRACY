@@ -56,7 +56,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 					String[] contentsParts = messageContent.split(":");
 					AID sender = msg.getSender();
 					if (contentsParts[0] == "price")
-						reakcjaNaZmianeCeny(sender, Integer.parseInt(contentsParts[1]));
+						adjustPreferredDeskPrice(sender, Integer.parseInt(contentsParts[1]));
 					
 
 					System.out.println(agentName + " otrzymal wiadomosc: "+msg.getContent());
@@ -80,17 +80,30 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	
 	private void makeOffer()
 	{
+		
 		//int[] ((EmployeeAgent)myAgent).getPreferredDesksIndices();
 		//int[] zValues = new int[]
+		int[] preferredDesksPrices;
+		/*
+		for (int preferredDesk = 0; preferredDesk < 4; preferredDesk++)
+		{
+			preferredDesksPrices = 
+		}
+		*/
 	}
 	
-	private void reakcjaNaZmianeCeny(AID sender, int price)
+	private int calculateEmployeeGainForGivenDesk(AID deskAID)
+	{
+		return 0;
+	}
+	
+	private void adjustPreferredDeskPrice(AID sender, int price)
 	{
 		HashMap<AID, Integer> prices = (HashMap<AID, Integer>) ((EmployeeAgent)myAgent).getDesksPrices();
 		if (prices.containsKey(sender))
 			prices.put(sender, price);
 				
-		// TODO zrobic response na doslanie ceny ack ok
+		// response na doslanie ceny ack ok
 		sendMessage(sender, "ackOk", ACLMessage.INFORM);
 		
 		priceResponseCounter--;
