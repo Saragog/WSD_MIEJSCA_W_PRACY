@@ -94,6 +94,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	
 	private int calculateEmployeeGainForGivenDesk(AID deskAID)
 	{
+		//int maxDeskPrice = 
 		return 0;
 	}
 	
