@@ -1,5 +1,6 @@
 package boot;
 
+import agents.EmployeeAgent;
 import jade.core.AID;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -27,6 +28,19 @@ public class MobileDeskReservationBoot {
 	    	    
 	    initAllDesks(allDesks);
 	    deskArgs[0] = allDesks;
+	    
+	    /*-------------------------
+	     * Ustawianie podstawowych ograniczen gornych dla preferowanych miejsc
+	     * Poki co to tak na sztywno tutaj bedzie / potem gdy juz bedzie dzialac wszystko
+	     * to bedzie mozna dorobic jakies czytanie z pliku by to mozna bylo uzaleznic i
+	     * latwo zmieniac
+	     * ------------------------*/
+	    int[] maxDeskPrices = new int[4];
+	    maxDeskPrices[0] = 100;
+	    maxDeskPrices[1] = 75;
+	    maxDeskPrices[2] = 50;
+	    maxDeskPrices[3] = 25;
+	    EmployeeAgent.setMaxDeskPrices(maxDeskPrices);
 	    
 	    /*-------------------------
 	     * Tworzenie agentow biurek

@@ -17,6 +17,37 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	private static final long serialVersionUID = 1L;
 	private int priceResponseCounter = 0;
 
+	private static final int EPSILON = 1; // TODO do obmyslenia jest to epsilon do wyliczania bid
+	
+	private class DataForCalculatingBidValue
+	{
+		private AID firstAID;
+		private int bestDeskPrice;
+		private int secondDeskPrice;
+		
+		public DataForCalculatingBidValue(AID firstAID, int bestDeskPrice, int secondDeskPrice)
+		{
+			this.firstAID = firstAID;
+			this.bestDeskPrice = bestDeskPrice;
+			this.secondDeskPrice = secondDeskPrice;
+		}
+		
+		public AID getFirstAID()
+		{
+			return firstAID;
+		}
+		
+		public int getBestDeskPrice()
+		{
+			return bestDeskPrice;
+		}
+		
+		public int getSecondDeskPrice()
+		{
+			return secondDeskPrice;
+		}
+	}
+	
 	public void action() {
 		
 		
@@ -78,24 +109,48 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		
 	}
 	
+	// TODO sprawdzcie prosze czy to wam pasuje.
 	private void makeOffer()
 	{
-		
-		//int[] ((EmployeeAgent)myAgent).getPreferredDesksIndices();
-		//int[] zValues = new int[]
-		int[] preferredDesksPrices;
-		/*
-		for (int preferredDesk = 0; preferredDesk < 4; preferredDesk++)
+		DataForCalculatingBidValue bidData = findTwoBestDesks();
+		int bidValue = bidData.getBestDeskPrice() - bidData.getSecondDeskPrice() + EPSILON;
+		int employeeMoney = ((EmployeeAgent)myAgent).getAmountOfMoney();
+		if (bidValue > employeeMoney)
 		{
-			preferredDesksPrices = 
+			// TODO nie mozemy wystawic bid bo przekracza nasze mozliwosci pieniedzy
+			// Zastanowic sie czy to tak ma byc czy jakos inaczej ...
+			((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK);
 		}
-		*/
+		else // TODO wystawiamy bid nowy do najlepszego biurka :)
+			sendMessage(bidData.firstAID, "bid", ACLMessage.PROPOSE);
 	}
 	
-	private int calculateEmployeeGainForGivenDesk(AID deskAID)
-	{
-		//int maxDeskPrice = 
-		return 0;
+	private DataForCalculatingBidValue findTwoBestDesks()
+	{	// TODO do zastanowienia sie czy nie przerobic kodu i zrobic by niektore z tych rzeczy byly nie w pracowniku tylko w zachowaniu
+		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
+		HashMap<AID, Integer> prices = (HashMap<AID, Integer>) ((EmployeeAgent)myAgent).getDesksPrices();
+		AID bestDesk = preferredDesksAIDs[0];
+		int numberOfPreferredDesks = EmployeeAgent.NUMBER_OF_PREFERRED_DESKS;
+		int[] maxDeskPrices = EmployeeAgent.getMaxDeskPrices();
+		int employeeGainForDesk;
+		int bestDeskGain = -1, secondDeskGain = -1;
+		AID currentDeskAID;
+		for (int preferredDeskIndex = 0; preferredDeskIndex < numberOfPreferredDesks; preferredDeskIndex++)
+		{
+			currentDeskAID = preferredDesksAIDs[preferredDeskIndex];
+			employeeGainForDesk = maxDeskPrices[preferredDeskIndex] - prices.get(currentDeskAID);
+			
+			if (bestDeskGain < employeeGainForDesk)
+			{
+				bestDesk = currentDeskAID;
+				secondDeskGain = bestDeskGain;
+				bestDeskGain = employeeGainForDesk;
+			}
+			else if (secondDeskGain < employeeGainForDesk)
+				secondDeskGain = employeeGainForDesk;
+		}
+		
+		return (new DataForCalculatingBidValue(bestDesk, bestDeskGain, secondDeskGain));		
 	}
 	
 	private void adjustPreferredDeskPrice(AID sender, int price)

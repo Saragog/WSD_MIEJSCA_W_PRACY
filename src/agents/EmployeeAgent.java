@@ -20,14 +20,10 @@ public class EmployeeAgent extends Agent{
 	// private int[] preferredDesksIndices;
 	private AID[] preferredDesksAIDs;
 	private AID[] allDesks;
-	private int[] maxDeskPrices;
+	private static int[] maxDeskPrices;
 	private Map<AID, Integer> desksPrices;
 	
-	private static int MAX_DESK_PRICE_BEST = 100;
-	private static int MAX_DESK_PRICE_SECOND = 75;
-	private static int MAX_DESK_PRICE_THIRD = 50;
-	private static int MAX_DESK_PRICE_FOURTH = 25;
-
+	public static final int NUMBER_OF_PREFERRED_DESKS = 4;
 	
 	protected void setup() { // Jako 1 argument AID z preferowanymi stolami 2 argument to AID wszystkich biurek
 		
@@ -45,6 +41,23 @@ public class EmployeeAgent extends Agent{
 		System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
 	}
 
+	public static void setMaxDeskPrices(int[] maxDeskPrices)
+	{
+		EmployeeAgent.maxDeskPrices = maxDeskPrices;
+		/*
+		MaxDeskPrices = new int[4];
+		for (int maxDeskPriceIndex = 0;
+				 maxDeskPriceIndex < NUMBER_OF_PREFERRED_DESKS;
+				 maxDeskPriceIndex++)
+			MaxDeskPrice[maxDeskPriceIndex] = maxDeskPrices[maxDeskPriceIndex];	
+		*/
+	}
+	
+	public static int[] getMaxDeskPrices()
+	{
+		return maxDeskPrices;
+	}
+	
 	public int getAmountOfMoney() {
 		return amountOfMoney;
 	}
@@ -88,5 +101,4 @@ public class EmployeeAgent extends Agent{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
 }
