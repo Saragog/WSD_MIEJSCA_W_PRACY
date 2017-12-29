@@ -8,8 +8,13 @@ import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class MobileDeskReservationBoot {
+	
+	private static final String fileName = "input.txt";
 
 	public static void main(String[] args)
 	{
@@ -36,10 +41,8 @@ public class MobileDeskReservationBoot {
 	     * latwo zmieniac
 	     * ------------------------*/
 	    int[] maxDeskPrices = new int[4];
-	    maxDeskPrices[0] = 100;
-	    maxDeskPrices[1] = 75;
-	    maxDeskPrices[2] = 50;
-	    maxDeskPrices[3] = 25;
+	    readMaxDeskPrices(fileName, maxDeskPrices);//wczytywanie ograniczeñ górnych dla preferowanych miejsc z pliku
+	    System.out.println("maxDeskPrices" + " " + maxDeskPrices[0] + " " + maxDeskPrices[1] + " " + maxDeskPrices[2] + " " + maxDeskPrices[3]);
 	    EmployeeAgent.setMaxDeskPrices(maxDeskPrices);
 	    
 	    /*-------------------------
@@ -67,7 +70,8 @@ public class MobileDeskReservationBoot {
 	    	AgentController employeeAgentController;
 	        try
 	        {
-	        	initpreferredDesksIndices(i, allDesks, preferredDesksIndices); // nadawanie preferencji pracownikom
+	        	readPreferred(fileName, allDesks, preferredDesksIndices, i); // nadawanie preferencji pracownikom
+	        	System.out.println("preferredDesksIndices" + " " + preferredDesksIndices[0] + " " + preferredDesksIndices[1] + " " + preferredDesksIndices[2] + " " + preferredDesksIndices[3]);
 	        	employeeAgentController = containerController.createNewAgent("Pracownik" + i, "agents.EmployeeAgent", employeeArgs);
 	            employeeAgentController.start();
 	        }
@@ -88,29 +92,85 @@ public class MobileDeskReservationBoot {
 			allDesks[i-1] = new AID("Biurko"+i,AID.ISLOCALNAME);
 		}
 	}
-
+	
 	/*-------------------------
-	 * Preferencje pracownikow.
+	 * wczytywanie ograniczeñ górnych dla preferowanych miejsc z pliku
 	 * -----------------------*/
-	private static void initpreferredDesksIndices(int option, AID[] allDesks, AID[] preferredDesksIndices) {
-		switch (option) {
-			case 1: 
+	private static void readMaxDeskPrices(String fileName, int[] maxDeskPrices) {
+		String line;
+		BufferedReader br = null;
+		FileReader fr = null;
+		try {
+			fr = new FileReader(fileName);
+			br = new BufferedReader(fr);
+			line = br.readLine();//wczytywanie ograniczen
+			String[] parts = line.split(" ");
+			for (int i=0; i<4; i++)
 			{
-				preferredDesksIndices[0] = allDesks[0];
-				preferredDesksIndices[1] = allDesks[1];
-				preferredDesksIndices[2] = allDesks[2];
-				preferredDesksIndices[3] = allDesks[3];
-				break;
+				maxDeskPrices[i] = Integer.parseInt(parts[i]);
 			}
-			case 2:
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+
+			try {
+
+				if (br != null)
+					br.close();
+
+				if (fr != null)
+					fr.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+
+		}
+	}
+	
+	/*-------------------------
+	 * wczytywanie preferencji pracownikow
+	 * -----------------------*/
+	private static void readPreferred(String fileName, AID[] allDesks, AID[] preferredDesksIndices, int worker) {
+		String line = null;
+		BufferedReader br = null;
+		FileReader fr = null;
+		try {
+			fr = new FileReader(fileName);
+			br = new BufferedReader(fr);
+			for (int i=0; i<(worker+1); i++)//pomijanie danych niepotrzebnych danych
 			{
-				preferredDesksIndices[0] = allDesks[1];
-				preferredDesksIndices[1] = allDesks[0];
-				preferredDesksIndices[2] = allDesks[2];
-				preferredDesksIndices[3] = allDesks[3];
-				break;
+				line = br.readLine();
 			}
-			
+			String[] parts = line.split(" ");//wczytywanie preferencji pracownika
+			for (int j=0; j<4; j++)
+			{
+				preferredDesksIndices[j] = allDesks[Integer.parseInt(parts[j])-1];
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+
+			try {
+
+				if (br != null)
+					br.close();
+
+				if (fr != null)
+					fr.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+
 		}
 	}
 	
