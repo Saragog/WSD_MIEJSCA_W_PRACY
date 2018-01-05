@@ -21,30 +21,46 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	
 	private class DataForCalculatingBidValue
 	{
-		private AID firstAID;
-		private int bestDeskPrice;
-		private int secondDeskPrice;
+		private int bidIncrement;
+		private int[] preferredDeskPrices;
 		
-		public DataForCalculatingBidValue(AID firstAID, int bestDeskPrice, int secondDeskPrice)
+		public DataForCalculatingBidValue(AID[] deskAIDs, HashMap<AID, Integer> mapOfDeskPrices)
 		{
-			this.firstAID = firstAID;
-			this.bestDeskPrice = bestDeskPrice;
-			this.secondDeskPrice = secondDeskPrice;
+			int[] maxDeskPrices = EmployeeAgent.getMaxDeskPrices();
+			preferredDeskPrices = readPreferredDeskPricesFromMap(deskAIDs, mapOfDeskPrices);
+			int[] deskGains = calculateDeskGains(maxDeskPrices, preferredDeskPrices); // wartosci Z
+			if (deskGains[0] > deskGains[1])
+				bidIncrement = deskGains[0] - deskGains[1] + EPSILON;
+			else
+				bidIncrement = EPSILON;			
 		}
 		
-		public AID getFirstAID()
+		private int[] readPreferredDeskPricesFromMap(AID[] deskAIDs, HashMap<AID, Integer> mapOfDeskPrices)
 		{
-			return firstAID;
+			int len = deskAIDs.length;
+			int[] preferredDeskPrices = new int[len];
+			for (int index = 0; index < len; index++)
+				preferredDeskPrices[index] = mapOfDeskPrices.get(deskAIDs[index]);
+			return preferredDeskPrices;
 		}
 		
-		public int getBestDeskPrice()
+		private int[] calculateDeskGains(int[] maxDeskPrices, int[] deskPrices)
 		{
-			return bestDeskPrice;
+			int len = deskPrices.length;
+			int[] deskGains = new int[len];
+			for (int deskIndex = 0; deskIndex < len; deskIndex++)
+				deskGains[deskIndex] = maxDeskPrices[deskIndex] - deskPrices[deskIndex]; 
+			return deskGains;
 		}
 		
-		public int getSecondDeskPrice()
+		public int getBidIncrement()
 		{
-			return secondDeskPrice;
+			return bidIncrement;
+		}
+		
+		public int[] getPreferredDeskPrices()
+		{
+			return preferredDeskPrices;
 		}
 	}
 	
@@ -112,45 +128,32 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	// TODO sprawdzcie prosze czy to wam pasuje.
 	private void makeOffer()
 	{
-		DataForCalculatingBidValue bidData = findTwoBestDesks();
-		int bidValue = bidData.getBestDeskPrice() - bidData.getSecondDeskPrice() + EPSILON;
+		DataForCalculatingBidValue bidData = preparePreferredDesksData();
+		int bidIncrement = bidData.getBidIncrement();
+		int[] preferredDeskPrices = bidData.getPreferredDeskPrices();
+		int len = preferredDeskPrices.length;
 		int employeeMoney = ((EmployeeAgent)myAgent).getAmountOfMoney();
-		if (bidValue > employeeMoney)
+		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
+		for (int preferredDeskIndex = 0; preferredDeskIndex < len; preferredDeskIndex++)
 		{
-			// TODO nie mozemy wystawic bid bo przekracza nasze mozliwosci pieniedzy
-			// Zastanowic sie czy to tak ma byc czy jakos inaczej ...
-			((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK);
+			if (preferredDeskPrices[preferredDeskIndex] + bidIncrement < employeeMoney)
+			{
+				sendMessage(preferredDesksAIDs[preferredDeskIndex], "bid", ACLMessage.PROPOSE); // bidujemy :)
+				break;
+			}
 		}
-		else // TODO wystawiamy bid nowy do najlepszego biurka :)
-			sendMessage(bidData.firstAID, "bid", ACLMessage.PROPOSE);
+		
+		((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK); // nie udalo sie nic zabidowac :(
 	}
-	
-	private DataForCalculatingBidValue findTwoBestDesks()
+		
+	private DataForCalculatingBidValue preparePreferredDesksData()
 	{	// TODO do zastanowienia sie czy nie przerobic kodu i zrobic by niektore z tych rzeczy byly nie w pracowniku tylko w zachowaniu
 		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
 		HashMap<AID, Integer> prices = (HashMap<AID, Integer>) ((EmployeeAgent)myAgent).getDesksPrices();
-		AID bestDesk = preferredDesksAIDs[0];
-		int numberOfPreferredDesks = EmployeeAgent.NUMBER_OF_PREFERRED_DESKS;
-		int[] maxDeskPrices = EmployeeAgent.getMaxDeskPrices();
-		int employeeGainForDesk;
-		int bestDeskGain = -1, secondDeskGain = -1;
-		AID currentDeskAID;
-		for (int preferredDeskIndex = 0; preferredDeskIndex < numberOfPreferredDesks; preferredDeskIndex++)
-		{
-			currentDeskAID = preferredDesksAIDs[preferredDeskIndex];
-			employeeGainForDesk = maxDeskPrices[preferredDeskIndex] - prices.get(currentDeskAID);
-			
-			if (bestDeskGain < employeeGainForDesk)
-			{
-				bestDesk = currentDeskAID;
-				secondDeskGain = bestDeskGain;
-				bestDeskGain = employeeGainForDesk;
-			}
-			else if (secondDeskGain < employeeGainForDesk)
-				secondDeskGain = employeeGainForDesk;
-		}
 		
-		return (new DataForCalculatingBidValue(bestDesk, bestDeskGain, secondDeskGain));		
+		DataForCalculatingBidValue data = new DataForCalculatingBidValue(preferredDesksAIDs, prices);
+		
+		return data;	
 	}
 	
 	private void adjustPreferredDeskPrice(AID sender, int price)
