@@ -6,6 +6,9 @@ import jade.lang.acl.ACLMessage;
 import utils.Price;
 import agents.EmployeeState;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import agents.*;
@@ -21,22 +24,47 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	private static final int EPSILON = 1; // TODO do obmyslenia jest to epsilon do wyliczania bid
 	
 	private class DataForCalculatingBidValue
-	{
-		private int bidIncrement;
+	{		
+		private Price bidIncrement;
 		private Price[] preferredDeskPrices;
+		
+		private Integer[] deskIndexesInOrderByGains; 
 		
 		public DataForCalculatingBidValue(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
 		{
 			int[] maxDeskPrices = EmployeeAgent.getMaxDeskPrices();
 			preferredDeskPrices = readPreferredDeskPricesFromMap(deskAIDs, mapOfDeskPrices);
 			
-			// TODO dorobic zaraz
+			Price[] deskGains = calculateDeskGains(maxDeskPrices, preferredDeskPrices); // wartosci Z
+			int len = maxDeskPrices.length;
 			
-			//Price[] deskGains = calculateDeskGains(maxDeskPrices, preferredDeskPrices); // wartosci Z
-			//if (deskGains[0] > deskGains[1])
-			//	bidIncrement = deskGains[0] - deskGains[1] + EPSILON;
-			//else
-			//	bidIncrement = EPSILON;			
+			deskIndexesInOrderByGains = new Integer[len];// = sortDeskGains(deskGains);
+			
+			for (int x = 0; x < len; x++)
+				deskIndexesInOrderByGains[x] = x;
+
+			Arrays.sort(deskIndexesInOrderByGains, new Comparator<Integer>() {
+				public int compare(Integer first, Integer second)
+				{
+					return deskGains[first].compareTo(deskGains[second]);
+				}
+			});
+			
+			int bestDeskIndex = deskIndexesInOrderByGains[0], secondDeskIndex = deskIndexesInOrderByGains[1];
+			int bidTokens = deskGains[bestDeskIndex].tokens - deskGains[secondDeskIndex].tokens;
+			int bidEpsilons = deskGains[bestDeskIndex].epsilons - deskGains[secondDeskIndex].epsilons + 1;
+			
+			bidIncrement = new Price(bidTokens, bidEpsilons);	
+		}
+		
+		private int[] sortDeskGains(Price[] deskGains)
+		{
+			int len = deskGains.length;
+			int[] deskIndexesInOrderByGains = new int[len];
+			
+			
+			
+			return deskIndexesInOrderByGains;
 		}
 		
 		private Price[] readPreferredDeskPricesFromMap(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
@@ -64,7 +92,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			return deskGains;
 		}
 		
-		public int getBidIncrement()
+		public Price getBidIncrement()
 		{
 			return bidIncrement;
 		}
@@ -140,23 +168,31 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	private void makeOffer()
 	{
 		DataForCalculatingBidValue bidData = preparePreferredDesksData();
-		int bidIncrement = bidData.getBidIncrement();
+		Price bidIncrement = bidData.getBidIncrement();
 		
 		// TODO poprawic to jeszcze
-		/*
-		int[] preferredDeskPrices = bidData.getPreferredDeskPrices();
+		
+		Price[] preferredDeskPrices = bidData.getPreferredDeskPrices();
 		int len = preferredDeskPrices.length;
 		int employeeMoney = ((EmployeeAgent)myAgent).getAmountOfMoney();
 		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
+		
+		int currentPriceTokens, currentPriceEpsilons;
+		Price currentPrice;
+		String messageContents = "";
 		for (int preferredDeskIndex = 0; preferredDeskIndex < len; preferredDeskIndex++)
 		{
-			if (preferredDeskPrices[preferredDeskIndex] + bidIncrement < employeeMoney)
+			currentPrice = preferredDeskPrices[preferredDeskIndex];
+			currentPriceTokens = currentPrice.tokens;
+			currentPriceEpsilons = currentPrice.epsilons; 
+			messageContents = "bid" + ":" + currentPriceTokens + bidIncrement.tokens + ":" + currentPriceEpsilons + bidIncrement.epsilons;
+			if (preferredDeskPrices[preferredDeskIndex].tokens < employeeMoney)
 			{
-				sendMessage(preferredDesksAIDs[preferredDeskIndex], "bid", ACLMessage.PROPOSE); // bidujemy :)
+				sendMessage(preferredDesksAIDs[preferredDeskIndex], messageContents, ACLMessage.PROPOSE); // bidujemy :)
 				break;
 			}
 		}
-		*/
+		
 		((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK); // nie udalo sie nic zabidowac :(
 	}
 		
