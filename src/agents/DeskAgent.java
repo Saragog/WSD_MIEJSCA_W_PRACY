@@ -20,10 +20,14 @@ public class DeskAgent extends Agent {
 	private Price currentPrice;
 	private DeskState state;
 	private AID[] allDesks;
+	private long startTime = System.currentTimeMillis();
+	private static final long minTime = 10000;
+	private AID winningEmployee;
 	
 
 
 	private List<AID> employeeList; 
+	private int desksTaken = 0;
 	/* 
 	 * Pytanie: Jakie informacje o sobie i o innych agentach
 	 * powinnien mieć DeskAgent.
@@ -55,6 +59,34 @@ public class DeskAgent extends Agent {
 
 	public void setDeskState(DeskState state) {
 		this.state = state;
+	}
+	
+	public int getDesksTaken(){
+		return desksTaken;
+	}
+	
+	public void setDesksTaken(int desksTaken){
+		this.desksTaken = desksTaken;
+	}
+	
+	public void addEmployeeToList(AID employee){
+		employeeList.add(employee);
+	}
+	
+	public int getAmountOfEmployees(){
+		return employeeList.size();
+	}
+	
+	public boolean minTimeElapsed(){
+		return System.currentTimeMillis() - startTime >= minTime;
+	}
+	
+	public AID getWinningEmployee(){
+		return winningEmployee;
+	}
+	
+	public void setWinningEmployee(AID employee){
+		this.winningEmployee = employee;
 	}
 
 }

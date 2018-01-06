@@ -39,6 +39,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 						    "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens)+":"+Integer.toString(myDeskAgent.getCurrentPrice().epsilons),
 						    ACLMessage.INFORM);
 			}
+			
 			else
 			{
 			
@@ -58,7 +59,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 		}
 		else
 		{
-			block();
+			//block();
 		}        
 		
 	}
@@ -70,4 +71,25 @@ public class DeskBehaviour extends CyclicBehaviour{
 		messageToBeSent.setContent(content);		
 		myAgent.send(messageToBeSent);
 	}
+	
+	private void incrementDesksTaken(DeskAgent deskAgent){
+		deskAgent.setDesksTaken(deskAgent.getDesksTaken() + 1);
+	}
+	
+	private void addEmployeeToList(AID employee, DeskAgent deskAgent){
+		deskAgent.addEmployeeToList(employee);
+	}
+	
+	private boolean shouldAuctionEnd(DeskAgent deskAgent){
+		return deskAgent.getAmountOfEmployees() <= deskAgent.getDesksTaken() && deskAgent.minTimeElapsed();
+	}
+	
+	private void endAuction(DeskAgent deskAgent){
+		
+		System.out.println("end auction");
+		sendMessage(deskAgent.getWinningEmployee(),
+			    "end auction",
+			    ACLMessage.INFORM);
+	}
+	
 }
