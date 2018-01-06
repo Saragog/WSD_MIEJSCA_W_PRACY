@@ -33,12 +33,15 @@ public class DeskBehaviour extends CyclicBehaviour{
 			{
 				case FREE:
 				{
+					if(performative == ACLMessage.INFORM_REF && content.equals("priceQuestion") )
+					{
 
-					System.out.println(agentName + " Obecna cena to: " + myDeskAgent.getCurrentPrice().tokens +", "+myDeskAgent.getCurrentPrice().epsilons);
-										
-					sendMessage(sender,
-							    "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens)+":"+Integer.toString(myDeskAgent.getCurrentPrice().epsilons),
-							    ACLMessage.INFORM_REF);
+						System.out.println(agentName + " Obecna cena to: " + myDeskAgent.getCurrentPrice().tokens +", "+myDeskAgent.getCurrentPrice().epsilons);
+											
+						sendMessage(sender,
+								    "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens)+":"+Integer.toString(myDeskAgent.getCurrentPrice().epsilons),
+								    ACLMessage.INFORM);
+					}
 				}
 				case TAKEN:
 				{
