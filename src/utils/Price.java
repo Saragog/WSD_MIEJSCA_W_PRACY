@@ -20,6 +20,15 @@ public class Price implements Comparable<Price>{
 				
 		return -1;
 	}
+
+
+	public Price(int tokens, int epsilons) {
+		
+		this.tokens = tokens;
+		this.epsilons = epsilons;
+	}
+	
+	
 	
 	
 
