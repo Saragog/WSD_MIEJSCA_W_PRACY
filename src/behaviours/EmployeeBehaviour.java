@@ -101,6 +101,11 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		{
 			return preferredDeskPrices;
 		}
+		
+		public Integer[] getDeskIndexesInOrderByGains()
+		{
+			return deskIndexesInOrderByGains;
+		}
 	}
 	
 	public void action() {
@@ -170,25 +175,24 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		DataForCalculatingBidValue bidData = preparePreferredDesksData();
 		Price bidIncrement = bidData.getBidIncrement();
 		
-		// TODO poprawic to jeszcze
-		
 		Price[] preferredDeskPrices = bidData.getPreferredDeskPrices();
 		int len = preferredDeskPrices.length;
 		int employeeMoney = ((EmployeeAgent)myAgent).getAmountOfMoney();
+		Integer[] deskIndexesInOrderByGains = bidData.getDeskIndexesInOrderByGains();
 		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
 		
 		int currentPriceTokens, currentPriceEpsilons;
 		Price currentPrice;
 		String messageContents = "";
-		for (int preferredDeskIndex = 0; preferredDeskIndex < len; preferredDeskIndex++)
+		for (int deskIndex = 0; deskIndex < len; deskIndex++)
 		{
-			currentPrice = preferredDeskPrices[preferredDeskIndex];
+			currentPrice = preferredDeskPrices[deskIndexesInOrderByGains[deskIndex]];
 			currentPriceTokens = currentPrice.tokens;
 			currentPriceEpsilons = currentPrice.epsilons; 
 			messageContents = "bid" + ":" + currentPriceTokens + bidIncrement.tokens + ":" + currentPriceEpsilons + bidIncrement.epsilons;
-			if (preferredDeskPrices[preferredDeskIndex].tokens < employeeMoney)
+			if (preferredDeskPrices[deskIndexesInOrderByGains[deskIndex]].tokens < employeeMoney)
 			{
-				sendMessage(preferredDesksAIDs[preferredDeskIndex], messageContents, ACLMessage.PROPOSE); // bidujemy :)
+				sendMessage(preferredDesksAIDs[deskIndexesInOrderByGains[deskIndex]], messageContents, ACLMessage.PROPOSE); // bidujemy :)
 				break;
 			}
 		}
