@@ -29,28 +29,38 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		{
 			Price[] maxDeskPrices = EmployeeAgent.getMaxDeskPrices();
 			preferredDeskPrices = readPreferredDeskPricesFromMap(deskAIDs, mapOfDeskPrices);
-			int[] deskGains = calculateDeskGains(maxDeskPrices, preferredDeskPrices); // wartosci Z
-			if (deskGains[0] > deskGains[1])
-				bidIncrement = deskGains[0] - deskGains[1] + EPSILON;
-			else
-				bidIncrement = EPSILON;			
+			
+			// TODO dorobic zaraz
+			
+			//Price[] deskGains = calculateDeskGains(maxDeskPrices, preferredDeskPrices); // wartosci Z
+			//if (deskGains[0] > deskGains[1])
+			//	bidIncrement = deskGains[0] - deskGains[1] + EPSILON;
+			//else
+			//	bidIncrement = EPSILON;			
 		}
 		
-		private int[] readPreferredDeskPricesFromMap(AID[] deskAIDs, HashMap<AID, Integer> mapOfDeskPrices)
+		private Price[] readPreferredDeskPricesFromMap(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
 		{
 			int len = deskAIDs.length;
-			int[] preferredDeskPrices = new int[len];
+			Price[] preferredDeskPrices = new Price[len];
 			for (int index = 0; index < len; index++)
 				preferredDeskPrices[index] = mapOfDeskPrices.get(deskAIDs[index]);
 			return preferredDeskPrices;
 		}
 		
-		private int[] calculateDeskGains(int[] maxDeskPrices, int[] deskPrices)
+		// TODO pozamieniac te max Desk prices na max desk tokens czy cos by nie mylilo sie
+		private Price[] calculateDeskGains(int[] maxDeskPrices, Price[] deskPrices)
 		{
 			int len = deskPrices.length;
-			int[] deskGains = new int[len];
+			int deskGainTokens, deskGainEpsilons;
+			Price[] deskGains = new Price[len];
 			for (int deskIndex = 0; deskIndex < len; deskIndex++)
-				deskGains[deskIndex] = maxDeskPrices[deskIndex] - deskPrices[deskIndex]; 
+			{
+				deskGainTokens = maxDeskPrices[deskIndex] - deskPrices[deskIndex].tokens;
+				deskGainEpsilons = -deskPrices[deskIndex].epsilons;
+				deskGains[deskIndex].tokens = deskGainTokens;
+				deskGains[deskIndex].epsilons = deskGainEpsilons;
+			}
 			return deskGains;
 		}
 		
@@ -59,7 +69,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			return bidIncrement;
 		}
 		
-		public int[] getPreferredDeskPrices()
+		public Price[] getPreferredDeskPrices()
 		{
 			return preferredDeskPrices;
 		}
@@ -131,6 +141,9 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	{
 		DataForCalculatingBidValue bidData = preparePreferredDesksData();
 		int bidIncrement = bidData.getBidIncrement();
+		
+		// TODO poprawic to jeszcze
+		
 		int[] preferredDeskPrices = bidData.getPreferredDeskPrices();
 		int len = preferredDeskPrices.length;
 		int employeeMoney = ((EmployeeAgent)myAgent).getAmountOfMoney();
