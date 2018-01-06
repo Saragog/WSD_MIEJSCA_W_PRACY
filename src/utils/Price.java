@@ -1,13 +1,13 @@
 package utils;
 
-public class price implements Comparable<price>{
+public class Price implements Comparable<Price>{
 	
 	public int tokens = 0;
 	public int epsilons = 0;
 	
 	
 	@Override
-	public int compareTo(price o) {
+	public int compareTo(Price o) {
 		if(this.tokens < o.tokens)
 			return 1;
 		if(this.tokens == o.tokens)
