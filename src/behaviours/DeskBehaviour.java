@@ -17,8 +17,10 @@ public class DeskBehaviour extends CyclicBehaviour{
 		ACLMessage msg = myAgent.receive();
 		String content;
 		int performative;
-		DeskState agentState = ((DeskAgent)myAgent).getDeskState();
-		AID sender;		
+		AID sender;	
+		DeskAgent myDeskAgent = ((DeskAgent)myAgent);
+		DeskState agentState = myDeskAgent.getDeskState();
+			
 		String agentName = myAgent.getAID().getName();
 		
 		if (msg != null	) 
@@ -32,10 +34,10 @@ public class DeskBehaviour extends CyclicBehaviour{
 				case FREE:
 				{
 
-					System.out.println(agentName + "Obecna cena to: " + ((DeskAgent)myAgent).getCurrentPrice());
+					System.out.println(agentName + " Obecna cena to: " + myDeskAgent.getCurrentPrice().tokens +", "+myDeskAgent.getCurrentPrice().epsilons);
 										
 					sendMessage(sender,
-							    "price:"+Integer.toString(((DeskAgent)myAgent).getCurrentPrice()),
+							    "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens)+":"+Integer.toString(myDeskAgent.getCurrentPrice().epsilons),
 							    ACLMessage.INFORM_REF);
 				}
 				case TAKEN:

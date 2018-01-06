@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jade.core.Agent;
+import utils.Price;
 import jade.core.AID;
 
 public class DeskAgent extends Agent {
@@ -16,7 +17,7 @@ public class DeskAgent extends Agent {
 	
 	private static final long serialVersionUID = 1L;
 
-	private int currentPrice;
+	private Price currentPrice;
 	private DeskState state;
 	private AID[] allDesks;
 	
@@ -32,7 +33,7 @@ public class DeskAgent extends Agent {
 	protected void setup() {
 		Object[] args = getArguments();
 		allDesks = (AID[])args[0];
-		this.currentPrice = 0;
+		
 		this.state = DeskState.FREE;
 		employeeList = new LinkedList<AID>();
 		System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
@@ -40,11 +41,11 @@ public class DeskAgent extends Agent {
 		
 	}
 
-	public int getCurrentPrice() {
+	public Price getCurrentPrice() {
 		return currentPrice;
 	}
 
-	public void setCurrentPrice(int currentPrice) {
+	public void setCurrentPrice(Price currentPrice) {
 		this.currentPrice = currentPrice;
 	}
 	
