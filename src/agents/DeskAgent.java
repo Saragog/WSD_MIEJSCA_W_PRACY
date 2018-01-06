@@ -33,7 +33,7 @@ public class DeskAgent extends Agent {
 	protected void setup() {
 		Object[] args = getArguments();
 		allDesks = (AID[])args[0];
-		
+		currentPrice = new Price();
 		this.state = DeskState.FREE;
 		employeeList = new LinkedList<AID>();
 		System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");

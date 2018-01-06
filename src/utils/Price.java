@@ -28,6 +28,11 @@ public class Price implements Comparable<Price>{
 		this.epsilons = epsilons;
 	}
 	
+	public Price()
+	{
+		
+	}
+	
 	
 	
 	
