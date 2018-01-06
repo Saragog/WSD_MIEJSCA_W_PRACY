@@ -27,7 +27,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		
 		public DataForCalculatingBidValue(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
 		{
-			Price[] maxDeskPrices = EmployeeAgent.getMaxDeskPrices();
+			int[] maxDeskPrices = EmployeeAgent.getMaxDeskPrices();
 			preferredDeskPrices = readPreferredDeskPricesFromMap(deskAIDs, mapOfDeskPrices);
 			
 			// TODO dorobic zaraz
@@ -143,7 +143,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		int bidIncrement = bidData.getBidIncrement();
 		
 		// TODO poprawic to jeszcze
-		
+		/*
 		int[] preferredDeskPrices = bidData.getPreferredDeskPrices();
 		int len = preferredDeskPrices.length;
 		int employeeMoney = ((EmployeeAgent)myAgent).getAmountOfMoney();
@@ -156,7 +156,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				break;
 			}
 		}
-		
+		*/
 		((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK); // nie udalo sie nic zabidowac :(
 	}
 		

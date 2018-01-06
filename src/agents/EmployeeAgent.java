@@ -21,7 +21,7 @@ public class EmployeeAgent extends Agent{
 	// private int[] preferredDesksIndices;
 	private AID[] preferredDesksAIDs;
 	private AID[] allDesks;
-	private static Price[] maxDeskPrices;
+	private static int[] maxDeskPrices;
 	private Map<AID, Price> desksPrices;
 	
 	public static final int NUMBER_OF_PREFERRED_DESKS = 4;
@@ -42,7 +42,7 @@ public class EmployeeAgent extends Agent{
 		System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
 	}
 
-	public static void setMaxDeskPrices(Price[] maxDeskPrices)
+	public static void setMaxDeskPrices(int[] maxDeskPrices)
 	{
 		EmployeeAgent.maxDeskPrices = maxDeskPrices;
 		/*
@@ -54,7 +54,7 @@ public class EmployeeAgent extends Agent{
 		*/
 	}
 	
-	public static Price[] getMaxDeskPrices()
+	public static int[] getMaxDeskPrices()
 	{
 		return maxDeskPrices;
 	}
