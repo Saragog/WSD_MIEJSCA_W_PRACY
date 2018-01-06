@@ -6,6 +6,7 @@ import java.util.Map;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
+import utils.Price;
 
 
 
@@ -20,8 +21,8 @@ public class EmployeeAgent extends Agent{
 	// private int[] preferredDesksIndices;
 	private AID[] preferredDesksAIDs;
 	private AID[] allDesks;
-	private static int[] maxDeskPrices;
-	private Map<AID, Integer> desksPrices;
+	private static Price[] maxDeskPrices;
+	private Map<AID, Price> desksPrices;
 	
 	public static final int NUMBER_OF_PREFERRED_DESKS = 4;
 	
@@ -32,7 +33,7 @@ public class EmployeeAgent extends Agent{
 		preferredDesksAIDs = (AID[])args[0];
 		allDesks = (AID[])args[1];
 		
-		desksPrices = new HashMap<AID, Integer> ();
+		desksPrices = new HashMap<AID, Price> ();
 		
 		this.state = EmployeeState.HAS_NO_DESK_TAKEN;
 		
@@ -41,7 +42,7 @@ public class EmployeeAgent extends Agent{
 		System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
 	}
 
-	public static void setMaxDeskPrices(int[] maxDeskPrices)
+	public static void setMaxDeskPrices(Price[] maxDeskPrices)
 	{
 		EmployeeAgent.maxDeskPrices = maxDeskPrices;
 		/*
@@ -53,7 +54,7 @@ public class EmployeeAgent extends Agent{
 		*/
 	}
 	
-	public static int[] getMaxDeskPrices()
+	public static Price[] getMaxDeskPrices()
 	{
 		return maxDeskPrices;
 	}
@@ -90,11 +91,11 @@ public class EmployeeAgent extends Agent{
 		this.allDesks = allDesks;
 	}
 
-	public Map<AID, Integer> getDesksPrices() {
+	public Map<AID, Price> getDesksPrices() {
 		return desksPrices;
 	}
 
-	public void setDesksPrices(Map<AID, Integer> desksPrices) {
+	public void setDesksPrices(Map<AID, Price> desksPrices) {
 		this.desksPrices = desksPrices;
 	}
 

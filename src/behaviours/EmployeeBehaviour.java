@@ -3,6 +3,7 @@ package behaviours;
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
+import utils.Price;
 import agents.EmployeeState;
 
 import java.util.HashMap;
@@ -22,11 +23,11 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	private class DataForCalculatingBidValue
 	{
 		private int bidIncrement;
-		private int[] preferredDeskPrices;
+		private Price[] preferredDeskPrices;
 		
-		public DataForCalculatingBidValue(AID[] deskAIDs, HashMap<AID, Integer> mapOfDeskPrices)
+		public DataForCalculatingBidValue(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
 		{
-			int[] maxDeskPrices = EmployeeAgent.getMaxDeskPrices();
+			Price[] maxDeskPrices = EmployeeAgent.getMaxDeskPrices();
 			preferredDeskPrices = readPreferredDeskPricesFromMap(deskAIDs, mapOfDeskPrices);
 			int[] deskGains = calculateDeskGains(maxDeskPrices, preferredDeskPrices); // wartosci Z
 			if (deskGains[0] > deskGains[1])
@@ -103,7 +104,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 					String[] contentsParts = messageContent.split(":");
 					AID sender = msg.getSender();
 					if (contentsParts[0] == "price")
-						adjustPreferredDeskPrice(sender, Integer.parseInt(contentsParts[1]));
+						adjustPreferredDeskPrice(sender, new Price(Integer.parseInt(contentsParts[1]), Integer.parseInt(contentsParts[2]))); 
 					
 
 					System.out.println(agentName + " otrzymal wiadomosc: "+msg.getContent());
@@ -149,16 +150,16 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	private DataForCalculatingBidValue preparePreferredDesksData()
 	{	// TODO do zastanowienia sie czy nie przerobic kodu i zrobic by niektore z tych rzeczy byly nie w pracowniku tylko w zachowaniu
 		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
-		HashMap<AID, Integer> prices = (HashMap<AID, Integer>) ((EmployeeAgent)myAgent).getDesksPrices();
+		HashMap<AID, Price> prices = (HashMap<AID, Price>) ((EmployeeAgent)myAgent).getDesksPrices();
 		
 		DataForCalculatingBidValue data = new DataForCalculatingBidValue(preferredDesksAIDs, prices);
 		
 		return data;	
 	}
 	
-	private void adjustPreferredDeskPrice(AID sender, int price)
+	private void adjustPreferredDeskPrice(AID sender, Price price)
 	{
-		HashMap<AID, Integer> prices = (HashMap<AID, Integer>) ((EmployeeAgent)myAgent).getDesksPrices();
+		HashMap<AID, Price> prices = (HashMap<AID, Price>) ((EmployeeAgent)myAgent).getDesksPrices();
 		if (prices.containsKey(sender))
 			prices.put(sender, price);
 				
