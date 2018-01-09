@@ -21,7 +21,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	private static final long serialVersionUID = 1L;
 	private int priceResponseCounter = 0;
 
-	private static final int EPSILON = 1; // TODO do obmyslenia jest to epsilon do wyliczania bid
+	// private static final int EPSILON = 1; // TODO aktualnie nie wykorzystany omowic to co mowil Palka
 	
 	private class DataForCalculatingBidValue
 	{		
@@ -32,11 +32,11 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		
 		public DataForCalculatingBidValue(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
 		{
-			int[] maxDeskPrices = EmployeeAgent.getMaxDeskPrices();
+			int[] maxDeskTokens = EmployeeAgent.getMaxDeskTokens();
 			preferredDeskPrices = readPreferredDeskPricesFromMap(deskAIDs, mapOfDeskPrices);
 			
-			Price[] deskGains = calculateDeskGains(maxDeskPrices, preferredDeskPrices); // wartosci Z
-			int len = maxDeskPrices.length;
+			Price[] deskGains = calculateDeskGains(maxDeskTokens, preferredDeskPrices); // wartosci Z
+			int len = maxDeskTokens.length;
 			
 			deskIndexesInOrderByGains = new Integer[len];// = sortDeskGains(deskGains);
 			
@@ -77,14 +77,14 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		}
 		
 		// TODO pozamieniac te max Desk prices na max desk tokens czy cos by nie mylilo sie
-		private Price[] calculateDeskGains(int[] maxDeskPrices, Price[] deskPrices)
+		private Price[] calculateDeskGains(int[] maxDeskTokens, Price[] deskPrices)
 		{
 			int len = deskPrices.length;
 			int deskGainTokens, deskGainEpsilons;
 			Price[] deskGains = new Price[len];
 			for (int deskIndex = 0; deskIndex < len; deskIndex++)
 			{
-				deskGainTokens = maxDeskPrices[deskIndex] - deskPrices[deskIndex].tokens;
+				deskGainTokens = maxDeskTokens[deskIndex] - deskPrices[deskIndex].tokens;
 				deskGainEpsilons = -deskPrices[deskIndex].epsilons;
 				deskGains[deskIndex].tokens = deskGainTokens;
 				deskGains[deskIndex].epsilons = deskGainEpsilons;
