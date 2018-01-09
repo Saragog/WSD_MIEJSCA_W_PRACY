@@ -21,6 +21,10 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	private static final long serialVersionUID = 1L;
 	private int priceResponseCounter = 0;
 
+	private int responseCount;
+	private int allDesksCount;
+	private int preferredDesksCount;
+	
 	// private static final int EPSILON = 1; // TODO aktualnie nie wykorzystany omowic to co mowil Palka
 	
 	private class DataForCalculatingBidValue
@@ -34,13 +38,13 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		{
 			int[] maxDeskTokens = EmployeeAgent.getMaxDeskTokens();
 			preferredDeskPrices = readPreferredDeskPricesFromMap(deskAIDs, mapOfDeskPrices);
-			
+			allDesksCount = deskAIDs.length;
+			preferredDesksCount = maxDeskTokens.length;
 			Price[] deskGains = calculateDeskGains(maxDeskTokens, preferredDeskPrices); // wartosci Z
-			int len = maxDeskTokens.length;
 			
-			deskIndexesInOrderByGains = new Integer[len];// = sortDeskGains(deskGains);
+			deskIndexesInOrderByGains = new Integer[preferredDesksCount];
 			
-			for (int x = 0; x < len; x++)
+			for (int x = 0; x < preferredDesksCount; x++)
 				deskIndexesInOrderByGains[x] = x;
 
 			Arrays.sort(deskIndexesInOrderByGains, new Comparator<Integer>() {
@@ -57,21 +61,10 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			bidIncrement = new Price(bidTokens, bidEpsilons);	
 		}
 		
-		private int[] sortDeskGains(Price[] deskGains)
-		{
-			int len = deskGains.length;
-			int[] deskIndexesInOrderByGains = new int[len];
-			
-			
-			
-			return deskIndexesInOrderByGains;
-		}
-		
 		private Price[] readPreferredDeskPricesFromMap(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
 		{
-			int len = deskAIDs.length;
-			Price[] preferredDeskPrices = new Price[len];
-			for (int index = 0; index < len; index++)
+			Price[] preferredDeskPrices = new Price[preferredDesksCount];
+			for (int index = 0; index < preferredDesksCount; index++)
 				preferredDeskPrices[index] = mapOfDeskPrices.get(deskAIDs[index]);
 			return preferredDeskPrices;
 		}
@@ -79,10 +72,9 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		// TODO pozamieniac te max Desk prices na max desk tokens czy cos by nie mylilo sie
 		private Price[] calculateDeskGains(int[] maxDeskTokens, Price[] deskPrices)
 		{
-			int len = deskPrices.length;
 			int deskGainTokens, deskGainEpsilons;
-			Price[] deskGains = new Price[len];
-			for (int deskIndex = 0; deskIndex < len; deskIndex++)
+			Price[] deskGains = new Price[preferredDesksCount];
+			for (int deskIndex = 0; deskIndex < preferredDesksCount; deskIndex++)
 			{
 				deskGainTokens = maxDeskTokens[deskIndex] - deskPrices[deskIndex].tokens;
 				deskGainEpsilons = -deskPrices[deskIndex].epsilons;
@@ -147,10 +139,15 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 					String[] contentsParts = messageContent.split(":");
 					AID sender = msg.getSender();
 					if (contentsParts[0] == "price")
-						adjustPreferredDeskPrice(sender, new Price(Integer.parseInt(contentsParts[1]), Integer.parseInt(contentsParts[2]))); 
-					
+					{
+						adjustPreferredDeskPrice(sender, new Price(Integer.parseInt(contentsParts[1]), Integer.parseInt(contentsParts[2])));
+						System.out.println(agentName + " otrzymal wiadomosc: "+msg.getContent());
+						responseCount++;
+						if (responseCount == preferredDesksCount)
+							((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.CALCULATING_NEW_OFFER);
+							
+					}
 
-					System.out.println(agentName + " otrzymal wiadomosc: "+msg.getContent());
 					
 				}
 				else
@@ -176,7 +173,6 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		Price bidIncrement = bidData.getBidIncrement();
 		
 		Price[] preferredDeskPrices = bidData.getPreferredDeskPrices();
-		int len = preferredDeskPrices.length;
 		int employeeMoney = ((EmployeeAgent)myAgent).getAmountOfMoney();
 		Integer[] deskIndexesInOrderByGains = bidData.getDeskIndexesInOrderByGains();
 		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
@@ -184,7 +180,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		int currentPriceTokens, currentPriceEpsilons;
 		Price currentPrice;
 		String messageContents = "";
-		for (int deskIndex = 0; deskIndex < len; deskIndex++)
+		for (int deskIndex = 0; deskIndex < preferredDesksCount; deskIndex++)
 		{
 			currentPrice = preferredDeskPrices[deskIndexesInOrderByGains[deskIndex]];
 			currentPriceTokens = currentPrice.tokens;
@@ -236,6 +232,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			sendMessage(preferredDesksAIDs[x], content, ACLMessage.INFORM_REF);
 		
 		priceResponseCounter = preferredDesksCount;
+		responseCount = 0;
 		((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.WAITING_FOR_PRICE_RESPONSES);
 	}
 	
