@@ -20,6 +20,13 @@ public class Price implements Comparable<Price>{
 				
 		return -1;
 	}
+	
+	/**/
+	public boolean isGreatter(Price p) {
+		int compare = this.compareTo(p);
+		if(compare == 1) return true;
+		else return false;
+	}
 
 
 	public Price(int tokens, int epsilons) {

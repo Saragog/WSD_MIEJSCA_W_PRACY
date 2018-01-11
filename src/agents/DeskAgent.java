@@ -33,7 +33,6 @@ public class DeskAgent extends Agent {
 	 * powinnien mieć DeskAgent.
 	 * id? Lista agentów? 
 	*/
-	
 	protected void setup() {
 		Object[] args = getArguments();
 		allDesks = (AID[])args[0];
@@ -87,6 +86,15 @@ public class DeskAgent extends Agent {
 	
 	public void setWinningEmployee(AID employee){
 		this.winningEmployee = employee;
+	}
+	
+	public boolean isEmployeeOnList(AID employee) {
+		if(employeeList.contains(employee)) return true;
+		else return false;
+	}
+	
+	public AID[] getAllDesk() {
+		return this.allDesks;
 	}
 
 }
