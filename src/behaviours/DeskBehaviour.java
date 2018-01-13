@@ -35,7 +35,9 @@ public class DeskBehaviour extends CyclicBehaviour{
 			performative = msg.getPerformative();
 			sender = msg.getSender();
 			
-			/*Funkcje 1,2,3,4 wykonywane sa… nie zaleznie od stanu agenta Desk.*/
+//			System.out.println(myAgent.getLocalName() + " otrzymaÅ‚ wiadomoÅ›Ä‡: \n \tContent: " +content+ "\n \tPerformatywa: " + performative + "\n");
+			
+			/*Funkcje 1,2,3,4 wykonywane saï¿½ nie zaleznie od stanu agenta Desk.*/
 			
 			/*	1.	- Odpowiedz na pytanie o aktualna cene.
 			 * 		- Sprawdzenie czy ten EmployeeAgent jest juz znany.*/
@@ -53,7 +55,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 			
 			/*2. Zapisanie inforamcji o tym, ze jedno z biorek zostalo zajete.*/
 			else if(performative == ACLMessage.INFORM && content.equals("idDeskTaken") ) {
-				System.out.println(agentName + ": Otrzymac‚ informacje o zmianie stanu DeskAgent: " + sender);
+				System.out.println(agentName + ": Otrzymacï¿½ informacje o zmianie stanu DeskAgent: " + sender);
 				incrementDesksTaken(myDeskAgent);
 			}
 			
@@ -62,7 +64,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 				//TODO	
 			}*/
 			
-			/*	4.	Zapisanie inforamcji o nowym Employee, ktory dolonczyl‚ do licytacji.
+			/*	4.	Zapisanie inforamcji o nowym Employee, ktory dolonczylï¿½ do licytacji.
 			 * 		Odpowiedz IdACK do nadawcy.*/
 			else if(performative == ACLMessage.INFORM) {
 				String[] parts = content.split(":");
@@ -80,11 +82,13 @@ public class DeskBehaviour extends CyclicBehaviour{
 			
 			/*5. Zachowanie zalezne od stanu agenta Desk.*/
 			else if(performative == ACLMessage.PROPOSE ) {
+				System.out.println(agentName + " otrzymanÅ‚ propozycje!");
 				switch (agentState){
 				
 				/*5.1 Aukcja w stanie FREE*/
 					case FREE:{
 							Price price = getPrice(content);
+							System.out.println("FREE "+myAgent.getLocalName() + " otrzymanÅ‚ propozycje:  " +price.tokens +" tokens " + price.epsilons + " epsilon" );
 							//boolean win = auction(myDeskAgent, sender, price);
 							System.out.println("Biurko otrzymalo wiadomosc ze ktos chce bidowac je za: " + price);
 							if(auction(myDeskAgent, sender, price)) {
@@ -99,6 +103,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 					case TAKEN:
 					{
 							Price price = getPrice(content);
+							System.out.println("TAKEN "+myAgent.getLocalName() + " otrzymanÅ‚ propozycje:  " +price.tokens +" tokens " + price.epsilons + " epsilon" );
 							auction(myDeskAgent, sender, price);
 					}
 				};
@@ -205,7 +210,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 			    "End",
 			    ACLMessage.INFORM);
 		
-		//TODO: Co ma zrobic agent, ktory sam zakonczyl‚ aukcje?
+		//TODO: Co ma zrobic agent, ktory sam zakonczylï¿½ aukcje?
 	}
 	
 }
