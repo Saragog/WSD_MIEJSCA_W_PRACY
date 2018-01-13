@@ -118,9 +118,16 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				
 				if (msg != null	) 
 				{
-			
 					System.out.println("wiadomosc: "+msg.getContent());
+
+					if (msg.getPerformative() == ACLMessage.INFORM && msg.getContent().equals("desk_overtaken"))
+					{
+						System.out.println("Przebicie stolka");
+						((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.HAS_NO_DESK_TAKEN);
+					}
 					
+					
+					// TODO zrobienie odebrania konca i huraa
 				}
 				else
 				{
@@ -160,6 +167,22 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				makeOffer();				
 				break;
 			}
+			case WAITING_FOR_BID_RESPONSE:
+			{
+				ACLMessage msg = myAgent.receive();
+				if(msg != null)
+				{
+					if(msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL)
+					{
+						((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.HAS_DESK_TAKEN); // mamy biurko huraaa
+					}
+					else
+					{
+						((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.HAS_NO_DESK_TAKEN); // Powracamy do poczatku
+					}
+				}
+			}
+			
 		}    
 		
 	}
@@ -187,7 +210,10 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		messageContents = "bid" + ":" + proposedPrice.tokens + ":" + proposedPrice.epsilons;
 
 		if (employeeMoney >= proposedPrice.tokens)
+		{
 			sendMessage(bestDeskAID, messageContents, ACLMessage.PROPOSE);
+			((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.WAITING_FOR_BID_RESPONSE);
+		}
 		else 
 			((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK); // not enough money
 
