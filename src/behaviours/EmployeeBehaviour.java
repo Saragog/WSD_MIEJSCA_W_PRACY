@@ -140,7 +140,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 					{
 						adjustPreferredDeskPrice(sender, new Price(Integer.parseInt(contentsParts[1]), Integer.parseInt(contentsParts[2])));
 						System.out.println(agentName + " otrzymal wiadomosc: "+msg.getContent());
-						responseCount++;
+						++responseCount;
 						if (responseCount == preferredDesksCount)
 							((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.CALCULATING_NEW_OFFER);
 							
@@ -168,6 +168,8 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	{
 		DataForCalculatingBidValue bidData = preparePreferredDesksData();
 		Price bidIncrement = bidData.getBidIncrement();
+		
+		System.out.println("Bid increment: " + bidIncrement.tokens);
 		
 		Price[] preferredDeskPrices = bidData.getPreferredDeskPrices();
 		int employeeMoney = ((EmployeeAgent)myAgent).getAmountOfMoney();
