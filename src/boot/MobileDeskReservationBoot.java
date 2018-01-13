@@ -28,9 +28,12 @@ public class MobileDeskReservationBoot {
 	    AID[] allDesks = new AID[4];	// identyfikatory biurek 
 	    AID[] preferredDesksIndices = new AID[4];	// identyfikatory biurek preferowanych przez pracownika
 	    //wypelnic 
+	    
+	    
+	    // TODO MAREK tutaj sie ustala to wszystko
 	    employeeArgs[0] = allDesks;
 	    employeeArgs[1] = preferredDesksIndices;
-	    employeeArgs[2] = 100; // TODO zrobic wczytywanie z pliku ...
+	    employeeArgs[2] = 100; // TODO zrobic wczytywanie z pliku ... <- TODO MAREK
 	    	    
 	    initAllDesks(allDesks);
 	    deskArgs[0] = allDesks;
@@ -66,7 +69,7 @@ public class MobileDeskReservationBoot {
 	    /*-----------------------------
 	     * Tworzenie agentow praciownikow.
 	     *------------------------------*/
-	    for(int i=1; i<=2; i++)
+	    for(int i=1; i<=2; i++) // TODO MAREK
 	    {
 	    	AgentController employeeAgentController;
 	        try
