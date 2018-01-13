@@ -37,9 +37,10 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		public DataForCalculatingBidValue(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
 		{
 			int[] maxDeskTokens = EmployeeAgent.getMaxDeskTokens();
+			preferredDesksCount = maxDeskTokens.length;
+
 			preferredDeskPrices = readPreferredDeskPricesFromMap(deskAIDs, mapOfDeskPrices);
 			allDesksCount = deskAIDs.length;
-			preferredDesksCount = maxDeskTokens.length;
 			Price[] deskGains = calculateDeskGains(maxDeskTokens, preferredDeskPrices); // wartosci Z
 			
 			deskIndexesInOrderByGains = new Integer[preferredDesksCount];
@@ -54,7 +55,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				}
 			});
 			
-			int bestDeskIndex = deskIndexesInOrderByGains[0], secondDeskIndex = deskIndexesInOrderByGains[1];
+			int bestDeskIndex = deskIndexesInOrderByGains[preferredDesksCount - 1], secondDeskIndex = deskIndexesInOrderByGains[preferredDesksCount - 2];
 			int bidTokens = deskGains[bestDeskIndex].tokens - deskGains[secondDeskIndex].tokens;
 			int bidEpsilons = deskGains[bestDeskIndex].epsilons - deskGains[secondDeskIndex].epsilons + 1;
 			
@@ -69,7 +70,6 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			return preferredDeskPrices;
 		}
 		
-		// TODO pozamieniac te max Desk prices na max desk tokens czy cos by nie mylilo sie
 		private Price[] calculateDeskGains(int[] maxDeskTokens, Price[] deskPrices)
 		{
 			int deskGainTokens, deskGainEpsilons;
@@ -78,8 +78,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			{
 				deskGainTokens = maxDeskTokens[deskIndex] - deskPrices[deskIndex].tokens;
 				deskGainEpsilons = -deskPrices[deskIndex].epsilons;
-				deskGains[deskIndex].tokens = deskGainTokens;
-				deskGains[deskIndex].epsilons = deskGainEpsilons;
+				deskGains[deskIndex] = new Price(deskGainTokens, deskGainEpsilons);
 			}
 			return deskGains;
 		}
@@ -132,13 +131,12 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			case WAITING_FOR_PRICE_RESPONSES:
 			{
 				ACLMessage msg = myAgent.receive();
-				
 				if (msg != null	) 
 				{
 					String messageContent = msg.getContent();
 					String[] contentsParts = messageContent.split(":");
 					AID sender = msg.getSender();
-					if (contentsParts[0] == "price")
+					if (contentsParts[0].equals("price"))
 					{
 						adjustPreferredDeskPrice(sender, new Price(Integer.parseInt(contentsParts[1]), Integer.parseInt(contentsParts[2])));
 						System.out.println(agentName + " otrzymal wiadomosc: "+msg.getContent());
@@ -166,7 +164,6 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		
 	}
 	
-	// TODO sprawdzcie prosze czy to wam pasuje.
 	private void makeOffer()
 	{
 		DataForCalculatingBidValue bidData = preparePreferredDesksData();
@@ -185,7 +182,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			currentPrice = preferredDeskPrices[deskIndexesInOrderByGains[deskIndex]];
 			currentPriceTokens = currentPrice.tokens;
 			currentPriceEpsilons = currentPrice.epsilons; 
-			messageContents = "bid" + ":" + currentPriceTokens + bidIncrement.tokens + ":" + currentPriceEpsilons + bidIncrement.epsilons;
+			messageContents = "bid" + ":" + (currentPriceTokens + bidIncrement.tokens) + ":" + currentPriceEpsilons + bidIncrement.epsilons;
 			if (preferredDeskPrices[deskIndexesInOrderByGains[deskIndex]].tokens < employeeMoney)
 			{
 				sendMessage(preferredDesksAIDs[deskIndexesInOrderByGains[deskIndex]], messageContents, ACLMessage.PROPOSE); // bidujemy :)
@@ -209,8 +206,10 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	private void adjustPreferredDeskPrice(AID sender, Price price)
 	{
 		HashMap<AID, Price> prices = (HashMap<AID, Price>) ((EmployeeAgent)myAgent).getDesksPrices();
-		if (prices.containsKey(sender))
+		if (!prices.containsKey(sender))
 			prices.put(sender, price);
+		else
+			prices.replace(sender, price);
 				
 		// response na doslanie ceny ack ok
 		sendMessage(sender, "ackOk", ACLMessage.INFORM);

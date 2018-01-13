@@ -52,19 +52,19 @@ public class DeskBehaviour extends CyclicBehaviour{
 			}
 			
 			/*2. Zapisanie inforamcji o tym, ze jedno z biorek zostalo zajete.*/
-			if(performative == ACLMessage.INFORM && content.equals("idDeskTaken") ) {
+			else if(performative == ACLMessage.INFORM && content.equals("idDeskTaken") ) {
 				System.out.println(agentName + ": Otrzymał informacje o zmianie stanu DeskAgent: " + sender);
 				incrementDesksTaken(myDeskAgent);
 			}
 			
 			/*3. Obsługa sygnału zakończenia aukcji.*/
-			if(performative == ACLMessage.INFORM && content.equals("End")) {
+			else if(performative == ACLMessage.INFORM && content.equals("End")) {
 				//TODO	
 			}
 			
 			/*	4.	Zapisanie inforamcji o nowym Employee, który dołączył do licytacji.
 			 * 		Odpowiedź IdACK do nadawcy.*/
-			if(performative == ACLMessage.INFORM) {
+			else if(performative == ACLMessage.INFORM) {
 				String[] parts = content.split(":");
 				switch (parts[0]) {
 					case "employeeId":{
@@ -85,6 +85,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 						if(performative == ACLMessage.PROPOSE ) {
 							Price price = getPrice(content);
 							boolean win = auction(myDeskAgent, sender, price);
+							System.out.println("Biurko otrzymalo wiadomosc ze ktos chce bidowac je za: " + price);
 							if(win) {
 								myDeskAgent.setDeskState(DeskState.TAKEN);	//zmiana stanu
 								incrementDesksTaken(myDeskAgent);	// inkrementacja #desksTaken
