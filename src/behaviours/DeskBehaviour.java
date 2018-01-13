@@ -59,7 +59,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 			
 			/*3. Obsługa sygnału zakończenia aukcji.*/
 			else if(performative == ACLMessage.INFORM && content.equals("End")) {
-				//TODO	
+				//TODO
 			}
 			
 			/*	4.	Zapisanie inforamcji o nowym Employee, który dołączył do licytacji.
