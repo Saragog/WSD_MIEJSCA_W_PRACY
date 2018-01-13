@@ -8,9 +8,6 @@ import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 /*
  * 4      				- liczba preferencji pojedynczego pracownika
@@ -35,7 +32,7 @@ public class MobileDeskReservationBoot {
 	    profile.setParameter(Profile.GUI, "true");
 	    ContainerController containerController = runtime.createMainContainer(profile);
 	    
-	    AuctionInputReader air = new AuctionInputReader("input.txt");
+	    AuctionInputReader air = new AuctionInputReader(fileName);
 
 		int preferenceNumber = air.getPreferenceNumber();
 		int deskCount = air.getDeskCount();
@@ -62,13 +59,9 @@ public class MobileDeskReservationBoot {
 	    
 	    System.out.println("DeskCount: " + deskCount + " EmplCount: " + employeeCount);
 	    
+	    
 	    for(int i=0; i < deskCount; ++i)
 	    {
-	    	System.out.println("A " + i + " ");
-		    employeeArgs[0] = allDesks;
-		    employeeArgs[1] = employeePreferences[i];
-		    employeeArgs[2] = employeeTokens[i];
-	    	
 	    	AgentController deskAgentController;
 	        try
 	        {
@@ -84,10 +77,14 @@ public class MobileDeskReservationBoot {
 	    /*-----------------------------
 	     * Tworzenie agentow pracownikow.
 	     *------------------------------*/
-	    for(int i=0; i < employeeCount; i++) // TODO MAREK
+	    for(int i=0; i < employeeCount; i++)
 	    {
-	    	System.out.println("B");
-
+	    	System.out.println("EmployeeCount " + employeeCount + " Employee numero " + i);
+	    	
+		    employeeArgs[0] = deducePreferredDeskAIDs(allDesks, employeePreferences[i]);
+		    employeeArgs[1] = allDesks;
+		    employeeArgs[2] = employeeTokens[i];
+	    	
 	    	AgentController employeeAgentController;
 	        try
 	        {
@@ -100,5 +97,14 @@ public class MobileDeskReservationBoot {
 	        }
 	    }
 	    
-	}	
+	}
+	
+	private static AID[] deducePreferredDeskAIDs(AID[] allDesks, int[] employeePreferences)
+	{
+		int len = employeePreferences.length;
+		AID preferredDesksAIDs[] = new AID[len];
+		for (int x = 0; x < len; x++)
+			preferredDesksAIDs[x] = allDesks[employeePreferences[x]-1];
+		return preferredDesksAIDs;
+	}
 }
