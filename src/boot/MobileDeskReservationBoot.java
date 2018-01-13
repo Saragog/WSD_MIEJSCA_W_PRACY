@@ -12,6 +12,17 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/*
+ * 4      				- liczba preferencji pojedynczego pracownika
+ * 100 75 50 25			- procentowe wyrazenie preferencji (max cena)
+ * 4					- liczba biurek
+ * 2					- liczba pracownikow
+ * 1 2 3 4				- preferencje pracownika 1
+ * 100					- liczba tokenow pracownika 1
+ * 2 1 3 4				- preferencje pracownika 2
+ * 100					- liczba tokenow praconwika 2
+ */
+
 public class MobileDeskReservationBoot {
 	
 	private static final String fileName = "input.txt";
@@ -23,41 +34,45 @@ public class MobileDeskReservationBoot {
 	    profile.setParameter(Profile.MAIN_HOST, "localhost");
 	    profile.setParameter(Profile.GUI, "true");
 	    ContainerController containerController = runtime.createMainContainer(profile);
-	    Object[] employeeArgs = new Object[3];	//liczba argumentow odbieranych przez pracownika
+	    
+	    AuctionInputReader air = new AuctionInputReader("input.txt");
+
+		int preferenceNumber = air.getPreferenceNumber();
+		int deskCount = air.getDeskCount();
+		int employeeCount = air.getEmployeeCount();
+		int preferredDeskMaxPrices[] = air.getPreferredDeskMaxPrices();
+		int employeePreferences[][] = air.getEmployeePreferences();
+		int employeeTokens[] = air.getEmployeeTokens();
+	    
+	    Object[] employeeArgs = new Object[3];						//liczba argumentow odbieranych przez pracownika
 	    Object[] deskArgs = new Object[1];
-	    AID[] allDesks = new AID[4];	// identyfikatory biurek 
-	    AID[] preferredDesksIndices = new AID[4];	// identyfikatory biurek preferowanych przez pracownika
-	    //wypelnic 
+	    AID[] allDesks = new AID[deskCount];						// identyfikatory biurek 
+	    AID[] preferredDesksIndices = new AID[preferenceNumber];	// identyfikatory biurek preferowanych przez pracownika	    
 	    
-	    
-	    // TODO MAREK tutaj sie ustala to wszystko
-	    employeeArgs[0] = allDesks;
-	    employeeArgs[1] = preferredDesksIndices;
-	    employeeArgs[2] = 100; // TODO zrobic wczytywanie z pliku ... <- TODO MAREK
-	    	    
-	    initAllDesks(allDesks);
+		for(int i=0; i < deskCount; i++)
+			allDesks[i] = new AID("Biurko"+(i+1),AID.ISLOCALNAME);
+		
 	    deskArgs[0] = allDesks;
 	    
-	    /*-------------------------
-	     * Ustawianie podstawowych ograniczen gornych dla preferowanych miejsc
-	     * Poki co to tak na sztywno tutaj bedzie / potem gdy juz bedzie dzialac wszystko
-	     * to bedzie mozna dorobic jakies czytanie z pliku by to mozna bylo uzaleznic i
-	     * latwo zmieniac
-	     * ------------------------*/
-	    int[] maxDeskPrices = new int[4];
-	    readMaxDeskPrices(fileName, maxDeskPrices);//wczytywanie ograniczeñ górnych dla preferowanych miejsc z pliku
-	    System.out.println("maxDeskPrices" + " " + maxDeskPrices[0] + " " + maxDeskPrices[1] + " " + maxDeskPrices[2] + " " + maxDeskPrices[3]);
-	    EmployeeAgent.setMaxDeskPrices(maxDeskPrices);
+	    EmployeeAgent.setMaxDeskPrices(preferredDeskMaxPrices);
 	    
 	    /*-------------------------
 	     * Tworzenie agentow biurek
 	     * ------------------------*/
-	    for(int i=1; i<=4; i++)
+	    
+	    System.out.println("DeskCount: " + deskCount + " EmplCount: " + employeeCount);
+	    
+	    for(int i=0; i < deskCount; ++i)
 	    {
+	    	System.out.println("A " + i + " ");
+		    employeeArgs[0] = allDesks;
+		    employeeArgs[1] = employeePreferences[i];
+		    employeeArgs[2] = employeeTokens[i];
+	    	
 	    	AgentController deskAgentController;
 	        try
 	        {
-	        	deskAgentController = containerController.createNewAgent("Biurko" + i, "agents.DeskAgent", deskArgs);
+	        	deskAgentController = containerController.createNewAgent("Biurko" + (i+1), "agents.DeskAgent", deskArgs);
 	            deskAgentController.start();
 	        }
 	        catch (StaleProxyException e)
@@ -67,16 +82,16 @@ public class MobileDeskReservationBoot {
 	    }
 	    
 	    /*-----------------------------
-	     * Tworzenie agentow praciownikow.
+	     * Tworzenie agentow pracownikow.
 	     *------------------------------*/
-	    for(int i=1; i<=2; i++) // TODO MAREK
+	    for(int i=0; i < employeeCount; i++) // TODO MAREK
 	    {
+	    	System.out.println("B");
+
 	    	AgentController employeeAgentController;
 	        try
 	        {
-	        	readPreferred(fileName, allDesks, preferredDesksIndices, i); // nadawanie preferencji pracownikom
-	        	System.out.println("preferredDesksIndices" + " " + preferredDesksIndices[0] + " " + preferredDesksIndices[1] + " " + preferredDesksIndices[2] + " " + preferredDesksIndices[3]);
-	        	employeeAgentController = containerController.createNewAgent("Pracownik" + i, "agents.EmployeeAgent", employeeArgs);
+	        	employeeAgentController = containerController.createNewAgent("Pracownik" + (i+1), "agents.EmployeeAgent", employeeArgs);
 	            employeeAgentController.start();
 	        }
 	        catch (StaleProxyException e)
@@ -85,97 +100,5 @@ public class MobileDeskReservationBoot {
 	        }
 	    }
 	    
-	}
-	
-	/*-------------------------
-	 * Tablica z AID wyszstkich biurek.
-	 * Tworzona jest jeszcze przed powoÅ‚aniem do Å¼ycia agentÃ³w.
-	 * -----------------------*/
-	private static void initAllDesks(AID[] allDesks) {
-		for(int i=1; i<=4; i++) {
-			allDesks[i-1] = new AID("Biurko"+i,AID.ISLOCALNAME);
-		}
-	}
-	
-	/*-------------------------
-	 * wczytywanie ograniczeñ górnych dla preferowanych miejsc z pliku
-	 * -----------------------*/
-	private static void readMaxDeskPrices(String fileName, int[] maxDeskPrices) {
-		String line;
-		BufferedReader br = null;
-		FileReader fr = null;
-		try {
-			fr = new FileReader(fileName);
-			br = new BufferedReader(fr);
-			line = br.readLine();//wczytywanie ograniczen
-			String[] parts = line.split(" ");
-			for (int i=0; i<4; i++)
-			{
-				maxDeskPrices[i] = Integer.parseInt(parts[i]);
-			}
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		finally {
-
-			try {
-
-				if (br != null)
-					br.close();
-
-				if (fr != null)
-					fr.close();
-
-			} catch (IOException ex) {
-
-				ex.printStackTrace();
-
-			}
-
-		}
-	}
-	
-	/*-------------------------
-	 * wczytywanie preferencji pracownikow
-	 * -----------------------*/
-	private static void readPreferred(String fileName, AID[] allDesks, AID[] preferredDesksIndices, int worker) {
-		String line = null;
-		BufferedReader br = null;
-		FileReader fr = null;
-		try {
-			fr = new FileReader(fileName);
-			br = new BufferedReader(fr);
-			for (int i=0; i<(worker+1); i++)//pomijanie danych niepotrzebnych danych
-			{
-				line = br.readLine();
-			}
-			String[] parts = line.split(" ");//wczytywanie preferencji pracownika
-			for (int j=0; j<4; j++)
-			{
-				preferredDesksIndices[j] = allDesks[Integer.parseInt(parts[j])-1];
-			}
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		finally {
-
-			try {
-
-				if (br != null)
-					br.close();
-
-				if (fr != null)
-					fr.close();
-
-			} catch (IOException ex) {
-
-				ex.printStackTrace();
-
-			}
-
-		}
-	}
-	
+	}	
 }
