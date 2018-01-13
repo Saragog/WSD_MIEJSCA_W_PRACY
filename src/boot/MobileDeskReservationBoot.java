@@ -23,13 +23,14 @@ public class MobileDeskReservationBoot {
 	    profile.setParameter(Profile.MAIN_HOST, "localhost");
 	    profile.setParameter(Profile.GUI, "true");
 	    ContainerController containerController = runtime.createMainContainer(profile);
-	    Object[] employeeArgs = new Object[2];	//liczba argumentow odbieranych przez pracownika
+	    Object[] employeeArgs = new Object[3];	//liczba argumentow odbieranych przez pracownika
 	    Object[] deskArgs = new Object[1];
 	    AID[] allDesks = new AID[4];	// identyfikatory biurek 
 	    AID[] preferredDesksIndices = new AID[4];	// identyfikatory biurek preferowanych przez pracownika
 	    //wypelnic 
 	    employeeArgs[0] = allDesks;
 	    employeeArgs[1] = preferredDesksIndices;
+	    employeeArgs[2] = 100; // TODO zrobic wczytywanie z pliku ...
 	    	    
 	    initAllDesks(allDesks);
 	    deskArgs[0] = allDesks;

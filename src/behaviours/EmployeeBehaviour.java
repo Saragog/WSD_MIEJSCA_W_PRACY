@@ -167,30 +167,30 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	private void makeOffer()
 	{
 		DataForCalculatingBidValue bidData = preparePreferredDesksData();
-		Price bidIncrement = bidData.getBidIncrement();
 		
-		Price[] preferredDeskPrices = bidData.getPreferredDeskPrices();
+		Price bidIncrement = bidData.getBidIncrement();	
+		
+		int bestDeskIndex = bidData.getDeskIndexesInOrderByGains()[preferredDesksCount-1];  // indeks najlepszego biurka
+		
+		Price bestDeskPrice = bidData.getPreferredDeskPrices()[bestDeskIndex];				// cena najlepszego biurka		
+		
 		int employeeMoney = ((EmployeeAgent)myAgent).getAmountOfMoney();
-		Integer[] deskIndexesInOrderByGains = bidData.getDeskIndexesInOrderByGains();
-		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
 		
-		int currentPriceTokens, currentPriceEpsilons;
-		Price currentPrice;
+		AID bestDeskAID = ((EmployeeAgent)myAgent).getPreferredDesksAIDs()[bestDeskIndex];
+		
+		
 		String messageContents = "";
-		for (int deskIndex = 0; deskIndex < preferredDesksCount; deskIndex++)
-		{
-			currentPrice = preferredDeskPrices[deskIndexesInOrderByGains[deskIndex]];
-			currentPriceTokens = currentPrice.tokens;
-			currentPriceEpsilons = currentPrice.epsilons; 
-			messageContents = "bid" + ":" + (currentPriceTokens + bidIncrement.tokens) + ":" + currentPriceEpsilons + bidIncrement.epsilons;
-			if (preferredDeskPrices[deskIndexesInOrderByGains[deskIndex]].tokens < employeeMoney)
-			{
-				sendMessage(preferredDesksAIDs[deskIndexesInOrderByGains[deskIndex]], messageContents, ACLMessage.PROPOSE); // bidujemy :)
-				break;
-			}
-		}
+
+		Price proposedPrice = new Price(bestDeskPrice.tokens + bidIncrement.tokens,
+				bestDeskPrice.epsilons + bidIncrement.epsilons);
 		
-		((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK); // nie udalo sie nic zabidowac :(
+		messageContents = "bid" + ":" + proposedPrice.tokens + ":" + proposedPrice.epsilons;
+
+		if (employeeMoney >= proposedPrice.tokens)
+			sendMessage(bestDeskAID, messageContents, ACLMessage.PROPOSE);
+		else 
+			((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK); // not enough money
+
 	}
 		
 	private DataForCalculatingBidValue preparePreferredDesksData()

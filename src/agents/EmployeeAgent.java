@@ -33,6 +33,8 @@ public class EmployeeAgent extends Agent{
 		preferredDesksAIDs = (AID[])args[0];
 		allDesks = (AID[])args[1];
 		
+		amountOfMoney = (int)args[2];
+		
 		desksPrices = new HashMap<AID, Price> ();
 		
 		this.state = EmployeeState.HAS_NO_DESK_TAKEN;
