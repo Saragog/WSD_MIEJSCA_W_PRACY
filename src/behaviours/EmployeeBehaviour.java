@@ -55,6 +55,20 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				}
 			});
 			
+			// 1 2 3 4
+			// 100
+			// 2 1 3 4
+			// 100
+			//
+			// 2gi agent kupil biurko 2 za 25 + E
+			// 
+			// teraz stan jest taki:
+			// 0 25+E 0 0
+			// 100 75 50 25
+			// 100 50-E 50 25
+			// 100 50 50-E 25
+			// 100 - 50 + E
+			
 			int bestDeskIndex = deskIndexesInOrderByGains[preferredDesksCount - 1], secondDeskIndex = deskIndexesInOrderByGains[preferredDesksCount - 2];
 			int bidTokens = deskGains[bestDeskIndex].tokens - deskGains[secondDeskIndex].tokens;
 			int bidEpsilons = deskGains[bestDeskIndex].epsilons - deskGains[secondDeskIndex].epsilons + 1;
@@ -118,8 +132,6 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				
 				if (msg != null	) 
 				{
-					System.out.println("wiadomosc: "+msg.getContent());
-
 					if (msg.getPerformative() == ACLMessage.INFORM && msg.getContent().equals("desk_overtaken"))
 					{
 						System.out.println("Przebicie stolka");
@@ -146,7 +158,6 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 					if (contentsParts[0].equals("price"))
 					{
 						adjustPreferredDeskPrice(sender, new Price(Integer.parseInt(contentsParts[1]), Integer.parseInt(contentsParts[2])));
-						System.out.println(agentName + " otrzymal wiadomosc: "+msg.getContent());
 						responseCount++;
 						if (responseCount == preferredDesksCount)
 							((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.CALCULATING_NEW_OFFER);
