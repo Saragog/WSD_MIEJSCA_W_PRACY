@@ -23,22 +23,15 @@ public class DeskAgent extends Agent {
 	private long startTime = System.currentTimeMillis();
 	private static final long minTime = 10000;
 	private AID winningEmployee;
-	
-
-
-	private List<AID> employeeList; 
+	private List<String> employeeList; 
 	private int desksTaken = 0;
-	/* 
-	 * Pytanie: Jakie informacje o sobie i o innych agentach
-	 * powinnien mieć DeskAgent.
-	 * id? Lista agentów? 
-	*/
+
 	protected void setup() {
 		Object[] args = getArguments();
 		allDesks = (AID[])args[0];
 		currentPrice = new Price();
 		this.state = DeskState.FREE;
-		employeeList = new LinkedList<AID>();
+		employeeList = new LinkedList<String>();
 		System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
 		addBehaviour(new behaviours.DeskBehaviour());
 		
@@ -68,7 +61,7 @@ public class DeskAgent extends Agent {
 		this.desksTaken = desksTaken;
 	}
 	
-	public void addEmployeeToList(AID employee){
+	public void addEmployeeToList(String employee){
 		employeeList.add(employee);
 	}
 	
@@ -88,7 +81,7 @@ public class DeskAgent extends Agent {
 		this.winningEmployee = employee;
 	}
 	
-	public boolean isEmployeeOnList(AID employee) {
+	public boolean isEmployeeOnList(String employee) {
 		if(employeeList.contains(employee)) return true;
 		else return false;
 	}
