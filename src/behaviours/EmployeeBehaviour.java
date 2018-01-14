@@ -132,14 +132,22 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				
 				if (msg != null	) 
 				{
-					if (msg.getPerformative() == ACLMessage.INFORM && msg.getContent().equals("desk_overtaken"))
+					if (msg.getPerformative() == ACLMessage.INFORM)
 					{
-						System.out.println("Przebicie stolka");
-						((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.HAS_NO_DESK_TAKEN);
+						if ( msg.getContent().equals("desk_overtaken"))
+						{
+							System.out.println("Przebicie stolka");
+							((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.HAS_NO_DESK_TAKEN);
+						}
+						else if(msg.getContent().equals("End"))
+						{
+							System.out.println( myAgent.getLocalName() +" wygrywa " + msg.getSender().getLocalName() );
+							((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.END);
+						}
 					}
 					
 					
-					// TODO zrobienie odebrania konca i huraa
+					
 				}
 				else
 				{
@@ -192,6 +200,11 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 						((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.HAS_NO_DESK_TAKEN); // Powracamy do poczatku
 					}
 				}
+				break;
+			}
+			case END:
+			{
+				block();				
 			}
 			
 		}    

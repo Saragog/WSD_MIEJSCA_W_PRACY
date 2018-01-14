@@ -9,5 +9,6 @@ public enum EmployeeState {
 	NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK,	// nie mamy pieniedzy by obstawic zadne z 4 preferowanych
 											// miejsc pracy, oczekuje ze miejsca pracy same przydziela
 											// mi jedno miejsce
-	WAITING_FOR_BID_RESPONSE
+	WAITING_FOR_BID_RESPONSE,
+	END
 }
