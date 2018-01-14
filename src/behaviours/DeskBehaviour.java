@@ -48,7 +48,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 				{
 
 
-					System.out.println(agentName + " Obecna cena to: " + myDeskAgent.getCurrentPrice().tokens +", "+myDeskAgent.getCurrentPrice().epsilons);
+					System.out.println(myDeskAgent.getLocalName() + " Obecna cena to: " + myDeskAgent.getCurrentPrice().tokens +", "+myDeskAgent.getCurrentPrice().epsilons);
 										
 					sendMessage(sender,
 							    "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens)+":"+Integer.toString(myDeskAgent.getCurrentPrice().epsilons),
@@ -85,15 +85,15 @@ public class DeskBehaviour extends CyclicBehaviour{
 				
 				/*5. Zachowanie zalezne od stanu agenta Desk.*/
 				else if(performative == ACLMessage.PROPOSE ) {
-					System.out.println(agentName + " otrzymano‚ propozycje!");
+					//System.out.println(agentName + " otrzymano‚ propozycje!");
 					switch (agentState){
 					
 					/*5.1 Aukcja w stanie FREE*/
 						case FREE:{
 								Price price = getPrice(content);
-								System.out.println("FREE "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +" tokens " + price.epsilons + " epsilon" + " od pracownika " + msg.getSender().getLocalName());
+								System.out.println("FREE "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +", " + price.epsilons + " od " + msg.getSender().getLocalName());
 								//boolean win = auction(myDeskAgent, sender, price);
-								System.out.println("Biurko otrzymalo wiadomosc ze ktos chce bidowac je za: " + price);
+								//System.out.println("Biurko otrzymalo wiadomosc ze ktos chce bidowac je za: " + price);
 								if(auction(myDeskAgent, sender, price)) {
 									myDeskAgent.setDeskState(DeskState.TAKEN);	//zmiana stanu
 									incrementDesksTaken(myDeskAgent);	// inkrementacja #desksTaken
@@ -106,7 +106,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 						case TAKEN:
 						{
 								Price price = getPrice(content);
-								System.out.println("TAKEN "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +" tokens " + price.epsilons + " epsilon" );
+								System.out.println("TAKEN "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +", " + price.epsilons + " od " + msg.getSender().getLocalName());
 								auction(myDeskAgent, sender, price);
 						}
 					};
