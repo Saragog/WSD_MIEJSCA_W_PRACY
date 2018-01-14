@@ -48,7 +48,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 				{
 
 
-					System.out.println(agentName + " Obecna cena to: " + myDeskAgent.getCurrentPrice().tokens +", "+myDeskAgent.getCurrentPrice().epsilons);
+					System.out.println(myDeskAgent.getLocalName() + " Obecna cena to: " + myDeskAgent.getCurrentPrice().tokens +", "+myDeskAgent.getCurrentPrice().epsilons);
 										
 					sendMessage(sender,
 							    "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens)+":"+Integer.toString(myDeskAgent.getCurrentPrice().epsilons),
