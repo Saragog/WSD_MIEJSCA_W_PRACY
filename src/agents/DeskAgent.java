@@ -32,7 +32,7 @@ public class DeskAgent extends Agent {
 		currentPrice = new Price();
 		this.state = DeskState.FREE;
 		employeeList = new LinkedList<String>();
-		System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
+		//System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
 		addBehaviour(new behaviours.DeskBehaviour());
 		
 	}

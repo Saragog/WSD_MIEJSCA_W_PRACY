@@ -41,7 +41,7 @@ public class EmployeeAgent extends Agent{
 		
 		addBehaviour(new behaviours.EmployeeBehaviour());
 		
-		System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
+		//System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
 	}
 
 	public static void setMaxDeskPrices(int[] maxDeskTokens)
