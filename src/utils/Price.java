@@ -44,7 +44,7 @@ public class Price implements Comparable<Price>{
 	@Override
 	public String toString() {
 		
-		return Integer.toString(this.tokens) +", "+ this.epsilons;
+		return Integer.toString(this.tokens) +"_"+ this.epsilons;
 	}
 
 	

@@ -50,7 +50,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			
 			System.out.println("Wyznaczone wartosci Z: " + Arrays.toString(deskGains));
 			
-			System.out.println("Przed sortowaniem po Z: " + Arrays.toString(deskGains));
+			System.out.println("Indeksowanie stolow przed sortowaniu ich po Z: " + Arrays.toString(deskIndexesInOrderByGains));
 			
 			Arrays.sort(deskIndexesInOrderByGains, new Comparator<Integer>() {
 				public int compare(Integer first, Integer second)
@@ -59,7 +59,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				}
 			});
 			
-			System.out.println("Po sortowaniu po Z: " + Arrays.toString(deskIndexesInOrderByGains));
+			System.out.println("Indeksowanie stolow po sortowaniu ich po ich Z: " + Arrays.toString(deskIndexesInOrderByGains));
 			
 			// 1 2 3 4
 			// 100
@@ -75,11 +75,20 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			// 100 50 50-E 25
 			// 100 - 50 + E
 			
+			// DO WYPISYWANIA POTEM WYRZUCIC !!! //
+			
+			//Price best_p =
+			//Price second_p = 
+			
+			//System.out.println("Najlepsze biurko" + );
+			
+			// DO TAD WYPISYWANIE POTEM WYRZUCIC !!! //
+			
 			int bestDeskIndex = deskIndexesInOrderByGains[preferredDesksCount - 1], secondDeskIndex = deskIndexesInOrderByGains[preferredDesksCount - 2];
 			int bidTokens = deskGains[bestDeskIndex].tokens - deskGains[secondDeskIndex].tokens;
 			int bidEpsilons = deskGains[bestDeskIndex].epsilons - deskGains[secondDeskIndex].epsilons + 1;
 			
-			bidIncrement = new Price(bidTokens, bidEpsilons);	
+			bidIncrement = new Price(bidTokens, bidEpsilons);
 		}
 		
 		private Price[] readPreferredDeskPricesFromMap(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
