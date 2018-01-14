@@ -47,7 +47,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			
 			for (int x = 0; x < preferredDesksCount; x++)
 				deskIndexesInOrderByGains[x] = x;
-
+			
 			System.out.println("Wyznaczone wartosci Z: " + Arrays.toString(deskGains));
 			
 			System.out.println("Przed sortowaniem po Z: " + Arrays.toString(deskGains));
