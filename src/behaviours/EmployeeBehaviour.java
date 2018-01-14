@@ -48,12 +48,18 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			for (int x = 0; x < preferredDesksCount; x++)
 				deskIndexesInOrderByGains[x] = x;
 
+			System.out.println("Wyznaczone wartosci Z: " + deskGains);
+			
+			System.out.println("Przed sortowaniem po Z: " + deskIndexesInOrderByGains);
+			
 			Arrays.sort(deskIndexesInOrderByGains, new Comparator<Integer>() {
 				public int compare(Integer first, Integer second)
 				{
 					return deskGains[first].compareTo(deskGains[second]);
 				}
 			});
+			
+			System.out.println("Po sortowaniu po Z: " + deskIndexesInOrderByGains);
 			
 			// 1 2 3 4
 			// 100
@@ -244,7 +250,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	}
 		
 	private DataForCalculatingBidValue preparePreferredDesksData()
-	{	// TODO do zastanowienia sie czy nie przerobic kodu i zrobic by niektore z tych rzeczy byly nie w pracowniku tylko w zachowaniu
+	{
 		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
 		HashMap<AID, Price> prices = (HashMap<AID, Price>) ((EmployeeAgent)myAgent).getDesksPrices();
 		
