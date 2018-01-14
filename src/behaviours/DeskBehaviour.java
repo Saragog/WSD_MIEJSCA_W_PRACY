@@ -91,7 +91,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 					/*5.1 Aukcja w stanie FREE*/
 						case FREE:{
 								Price price = getPrice(content);
-								System.out.println("FREE "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +" tokens " + price.epsilons + " epsilon" );
+								System.out.println("FREE "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +" tokens " + price.epsilons + " epsilon" + " od pracownika " + msg.getSender().getLocalName());
 								//boolean win = auction(myDeskAgent, sender, price);
 								System.out.println("Biurko otrzymalo wiadomosc ze ktos chce bidowac je za: " + price);
 								if(auction(myDeskAgent, sender, price)) {
