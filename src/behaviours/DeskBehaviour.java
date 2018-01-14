@@ -100,6 +100,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 									sendMessageToList(myDeskAgent.getAllDesk(),"idDeskTaken", ACLMessage.INFORM); //informuje innych agentów Desk o zmianie stanu.
 								
 							}
+							break;
 							
 						}
 						/*5.2 Aukcja w stanie TAKEN*/
