@@ -2,6 +2,7 @@ package utils;
 
 public class Price implements Comparable<Price>{
 	
+	
 	public int tokens = 0;
 	public int epsilons = 0;
 	
@@ -39,6 +40,15 @@ public class Price implements Comparable<Price>{
 	{
 		
 	}
+	
+	@Override
+	public String toString() {
+		
+		return Integer.toString(this.tokens) +", "+ this.epsilons;
+	}
+
+	
+	
 	
 	
 	
