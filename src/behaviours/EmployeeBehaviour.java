@@ -48,9 +48,9 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			for (int x = 0; x < preferredDesksCount; x++)
 				deskIndexesInOrderByGains[x] = x;
 
-			System.out.println("Wyznaczone wartosci Z: " + deskGains);
+			System.out.println("Wyznaczone wartosci Z: " + Arrays.toString(deskGains));
 			
-			System.out.println("Przed sortowaniem po Z: " + deskIndexesInOrderByGains);
+			System.out.println("Przed sortowaniem po Z: " + Arrays.toString(deskGains));
 			
 			Arrays.sort(deskIndexesInOrderByGains, new Comparator<Integer>() {
 				public int compare(Integer first, Integer second)
@@ -59,7 +59,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				}
 			});
 			
-			System.out.println("Po sortowaniu po Z: " + deskIndexesInOrderByGains);
+			System.out.println("Po sortowaniu po Z: " + Arrays.toString(deskIndexesInOrderByGains));
 			
 			// 1 2 3 4
 			// 100
