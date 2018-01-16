@@ -21,36 +21,46 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	private static final long serialVersionUID = 1L;
 	private int priceResponseCounter = 0;
 
-	private int responseCount;
 	private int allDesksCount;
-	private int preferredDesksCount;
+	private int desksCount;
 	
 	// private static final int EPSILON = 1; // TODO aktualnie nie wykorzystany omowic to co mowil Palka
 	
 	private class DataForCalculatingBidValue
 	{		
 		private Price bidIncrement;
-		private Price[] preferredDeskPrices;
+		private Price[] deskPrices;
+		
+		private AID deskToBidAID;
 		
 		private Integer[] deskIndexesInOrderByGains; 
 		
 		public DataForCalculatingBidValue(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
 		{
-			int[] maxDeskTokens = EmployeeAgent.getMaxDeskTokens();
-			preferredDesksCount = maxDeskTokens.length;
+			// TODO tutaj duuuuuzo zmian beeedzie nie wiem ile ale duuuzo :( ...
+						
+			float[] allDeskMaxBidTokenParts = ((EmployeeAgent)myAgent).getAllDeskMaxBidTokenParts();
+			desksCount = allDeskMaxBidTokenParts.length;
 
-			preferredDeskPrices = readPreferredDeskPricesFromMap(deskAIDs, mapOfDeskPrices);
+			// TODO zmienic na cos sensownego na teraz ...
+			// TODO to bedzie dzialac ale to czytanie mapy i przeksztalcanie jej calej na tablice wiec dla efektywnosci przerobic pozniej
+			deskPrices =  readPreferredDeskPricesFromMap(deskAIDs, mapOfDeskPrices);
+			
 			allDesksCount = deskAIDs.length;
-			Price[] deskGains = calculateDeskGains(maxDeskTokens, preferredDeskPrices); // wartosci Z
+			Price[] deskGains = calculateDeskGains(allDeskMaxBidTokenParts, deskPrices); // wartosci Z
 			
-			deskIndexesInOrderByGains = new Integer[preferredDesksCount];
+			System.out.println(Arrays.toString(deskGains));
 			
-			for (int x = 0; x < preferredDesksCount; x++)
+			// DO TAD PRZEROBIC BO TO ZAMIANA MAPY NA TABLICE CO JEST SLABE
+			
+			deskIndexesInOrderByGains = new Integer[desksCount];
+			
+			for (int x = 0; x < desksCount; x++)
 				deskIndexesInOrderByGains[x] = x;
 			
-			System.out.println("Wyznaczone wartosci Z: " + Arrays.toString(deskGains));
+			//System.out.println("Wyznaczone wartosci Z: " + Arrays.toString(deskGains));
 			
-			System.out.println("Indeksowanie stolow przed sortowaniu ich po Z: " + Arrays.toString(deskIndexesInOrderByGains));
+			//System.out.println("Indeksowanie stolow przed sortowaniu ich po Z: " + Arrays.toString(deskIndexesInOrderByGains));
 			
 			Arrays.sort(deskIndexesInOrderByGains, new Comparator<Integer>() {
 				public int compare(Integer first, Integer second)
@@ -59,7 +69,8 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				}
 			});
 			
-			System.out.println("Indeksowanie stolow po sortowaniu ich po ich Z: " + Arrays.toString(deskIndexesInOrderByGains));
+			
+			//System.out.println("Indeksowanie stolow po sortowaniu ich po ich Z: " + Arrays.toString(deskIndexesInOrderByGains));
 			
 			// 1 2 3 4
 			// 100
@@ -84,28 +95,32 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			
 			// DO TAD WYPISYWANIE POTEM WYRZUCIC !!! //
 			
-			int bestDeskIndex = deskIndexesInOrderByGains[preferredDesksCount - 1], secondDeskIndex = deskIndexesInOrderByGains[preferredDesksCount - 2];
+			int bestDeskIndex = deskIndexesInOrderByGains[desksCount - 1], secondDeskIndex = deskIndexesInOrderByGains[desksCount - 2];
 			int bidTokens = deskGains[bestDeskIndex].tokens - deskGains[secondDeskIndex].tokens;
 			int bidEpsilons = deskGains[bestDeskIndex].epsilons - deskGains[secondDeskIndex].epsilons + 1;
+			
+			deskToBidAID = deskAIDs[bestDeskIndex];
 			
 			bidIncrement = new Price(bidTokens, bidEpsilons);
 		}
 		
 		private Price[] readPreferredDeskPricesFromMap(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
 		{
-			Price[] preferredDeskPrices = new Price[preferredDesksCount];
-			for (int index = 0; index < preferredDesksCount; index++)
+			Price[] preferredDeskPrices = new Price[desksCount];
+			for (int index = 0; index < desksCount; index++)
 				preferredDeskPrices[index] = mapOfDeskPrices.get(deskAIDs[index]);
 			return preferredDeskPrices;
 		}
 		
-		private Price[] calculateDeskGains(int[] maxDeskTokens, Price[] deskPrices)
+		private Price[] calculateDeskGains(float[] maxDeskBidTokenPercentages, Price[] deskPrices)
 		{
 			int deskGainTokens, deskGainEpsilons;
-			Price[] deskGains = new Price[preferredDesksCount];
-			for (int deskIndex = 0; deskIndex < preferredDesksCount; deskIndex++)
+			int employeeMoney = ((EmployeeAgent)myAgent).getAmountOfMoney();
+
+			Price[] deskGains = new Price[desksCount];
+			for (int deskIndex = 0; deskIndex < desksCount; deskIndex++)
 			{
-				deskGainTokens = maxDeskTokens[deskIndex] - deskPrices[deskIndex].tokens;
+				deskGainTokens = (int)(maxDeskBidTokenPercentages[deskIndex] * employeeMoney) - deskPrices[deskIndex].tokens;
 				deskGainEpsilons = -deskPrices[deskIndex].epsilons;
 				deskGains[deskIndex] = new Price(deskGainTokens, deskGainEpsilons);
 			}
@@ -119,12 +134,17 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		
 		public Price[] getPreferredDeskPrices()
 		{
-			return preferredDeskPrices;
+			return deskPrices;
 		}
 		
 		public Integer[] getDeskIndexesInOrderByGains()
 		{
 			return deskIndexesInOrderByGains;
+		}
+		
+		public AID getDeskToBidAID()
+		{
+			return deskToBidAID;
 		}
 	}
 	
@@ -181,13 +201,10 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 					if (contentsParts[0].equals("price"))
 					{
 						adjustPreferredDeskPrice(sender, new Price(Integer.parseInt(contentsParts[1]), Integer.parseInt(contentsParts[2])));
-						responseCount++;
-						if (responseCount == preferredDesksCount)
-							((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.CALCULATING_NEW_OFFER);
-							
+						priceResponseCounter--;
+						if (priceResponseCounter < 1)
+							((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.CALCULATING_NEW_OFFER);							
 					}
-
-					
 				}
 				else
 				{
@@ -228,42 +245,52 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	
 	private void makeOffer()
 	{
+
 		DataForCalculatingBidValue bidData = preparePreferredDesksData();
 		
 		Price bidIncrement = bidData.getBidIncrement();	
 		
-		int bestDeskIndex = bidData.getDeskIndexesInOrderByGains()[preferredDesksCount-1];  // indeks najlepszego biurka
+		int bestDeskIndex = bidData.getDeskIndexesInOrderByGains()[desksCount-1];  // indeks najlepszego biurka
 		
 		Price bestDeskPrice = bidData.getPreferredDeskPrices()[bestDeskIndex];				// cena najlepszego biurka		
 		
 		int employeeMoney = ((EmployeeAgent)myAgent).getAmountOfMoney();
 		
-		AID bestDeskAID = ((EmployeeAgent)myAgent).getPreferredDesksAIDs()[bestDeskIndex];
+		AID deskToBidAID = bidData.getDeskToBidAID();
 		
+		// Do debugowania
 		
-		String messageContents = "";
-
+		String name = ((EmployeeAgent)myAgent).getLocalName();
+		// To wywalic gdy bedzie naprawione
+		
 		Price proposedPrice = new Price(bestDeskPrice.tokens + bidIncrement.tokens,
 				bestDeskPrice.epsilons + bidIncrement.epsilons);
 		
-		messageContents = "bid" + ":" + proposedPrice.tokens + ":" + proposedPrice.epsilons;
+		String messageContents = "bid" + ":" + proposedPrice.tokens + ":" + proposedPrice.epsilons;
 
 		if (employeeMoney >= proposedPrice.tokens)
 		{
-			sendMessage(bestDeskAID, messageContents, ACLMessage.PROPOSE);
+			//System.out.println("Wysylam: " + name);
+			sendMessage(deskToBidAID, messageContents, ACLMessage.PROPOSE);
 			((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.WAITING_FOR_BID_RESPONSE);
 		}
-		else 
-			((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK); // not enough money
-
+		//else 
+		//	((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK); // not enough money
+		
+		//System.out.println("Jol, jol, Jestem pracownik: " + name);
+		//System.out.println("Jestem prosty czlowiek i dla mnie w deskach podoba sie zysk z ich posiadania");
+		//for (int x = 0; x < desks.length; x++)
+		//System.out.println("Najbardziej podoba mi sie deska " + deskToBidAID.getLocalName() + " bo ma takie fajne atrybuty, wiec zaplace za nia " + proposedPrice.toString());
+		
+		//System.out.println("Koncze bidowanie pracownik: " + ((EmployeeAgent)myAgent).getLocalName());
 	}
 		
 	private DataForCalculatingBidValue preparePreferredDesksData()
 	{
-		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
+		AID[] desksAIDs = ((EmployeeAgent)myAgent).getAllDesks(); // Wszystkie AIDs-y
 		HashMap<AID, Price> prices = (HashMap<AID, Price>) ((EmployeeAgent)myAgent).getDesksPrices();
 		
-		DataForCalculatingBidValue data = new DataForCalculatingBidValue(preferredDesksAIDs, prices);
+		DataForCalculatingBidValue data = new DataForCalculatingBidValue(desksAIDs, prices);
 		
 		return data;	
 	}
@@ -278,25 +305,19 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 				
 		// response na doslanie ceny ack ok
 		sendMessage(sender, "ackOk", ACLMessage.INFORM);
-		
-		priceResponseCounter--;
-		if (priceResponseCounter < 1)
-			((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.CALCULATING_NEW_OFFER);
 	}
 	
 	private void askPreferredDesksAboutPrice()
 	{
-		AID[] preferredDesksAIDs = ((EmployeeAgent)myAgent).getPreferredDesksAIDs();
 		AID[] allDesks = ((EmployeeAgent)myAgent).getAllDesks();
-		int preferredDesksCount = allDesks.length;
+		int desksCount = allDesks.length;
 		
 		String content = "priceQuestion";
 		
-		for (int x = 0; x < preferredDesksCount; x++)
-			sendMessage(preferredDesksAIDs[x], content, ACLMessage.INFORM_REF);
+		for (int x = 0; x < desksCount; x++)
+			sendMessage(allDesks[x], content, ACLMessage.INFORM_REF);
 		
-		priceResponseCounter = preferredDesksCount;
-		responseCount = 0;
+		priceResponseCounter = desksCount;
 		((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.WAITING_FOR_PRICE_RESPONSES);
 	}
 	

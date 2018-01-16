@@ -1,5 +1,6 @@
 package agents;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,10 +19,9 @@ public class EmployeeAgent extends Agent{
 	private static final long serialVersionUID = 1L;
 	private int amountOfMoney;
 	private EmployeeState state;
-	// private int[] preferredDesksIndices;
-	private AID[] preferredDesksAIDs;
 	private AID[] allDesks;
-	private static int[] maxDeskTokens;
+	private static int[] preferredDeskMaxBidTokenPercentages;
+	private float[] allDeskMaxBidTokenParts;
 	private Map<AID, Price> desksPrices;
 	
 	public static final int NUMBER_OF_PREFERRED_DESKS = 4;
@@ -30,35 +30,46 @@ public class EmployeeAgent extends Agent{
 		
 		Object[] args = getArguments();
 				
-		preferredDesksAIDs = (AID[])args[0];
+		
+		// TODO LEKKIE ZMIANY W KOLEJNOSCI ARGUMENTOW ???
+		
+		System.out.println("WTF HAPPENED ... " + Arrays.toString((Integer[])args[0]) + getLocalName());
+		
 		allDesks = (AID[])args[1];
-		
+		deduceAllDeskMaxBidTokenParts(args[0]);
 		amountOfMoney = (int)args[2];
-		
+		System.out.println(allDeskMaxBidTokenParts);
+
 		desksPrices = new HashMap<AID, Price> ();
 		
 		this.state = EmployeeState.HAS_NO_DESK_TAKEN;
 		
-		addBehaviour(new behaviours.EmployeeBehaviour());
 		
-		//System.out.println("Czesc tutaj agent: " + getAID().getName()+" jestem gotowy!!!");
-	}
-
-	public static void setMaxDeskPrices(int[] maxDeskTokens)
-	{
-		EmployeeAgent.maxDeskTokens = maxDeskTokens;
-		/*
-		MaxDeskPrices = new int[4];
-		for (int maxDeskPriceIndex = 0;
-				 maxDeskPriceIndex < NUMBER_OF_PREFERRED_DESKS;
-				 maxDeskPriceIndex++)
-			MaxDeskPrice[maxDeskPriceIndex] = maxDeskPrices[maxDeskPriceIndex];	
-		*/
+		addBehaviour(new behaviours.EmployeeBehaviour());
 	}
 	
-	public static int[] getMaxDeskTokens()
+	private void deduceAllDeskMaxBidTokenParts(Object preferedDeskIndices)
 	{
-		return maxDeskTokens;
+    	System.out.println("Prefered indices " + Arrays.toString((Integer[])preferedDeskIndices) + getLocalName());
+		
+		int len = allDesks.length, position;
+		allDeskMaxBidTokenParts = new float[len];
+		for (int deskIndex = 0; deskIndex < len; deskIndex++)
+		{
+			position = Arrays.asList((Integer[])preferedDeskIndices).indexOf(Integer.valueOf(deskIndex+1));
+			if (position == -1) allDeskMaxBidTokenParts[deskIndex] = (float)0.0;
+			else allDeskMaxBidTokenParts[deskIndex] = (float) ((float)preferredDeskMaxBidTokenPercentages[position] / 100.0);	
+		}
+	}
+
+	public static void setPreferredDeksMaxBidTokenPercentages(int[] preferredDeskMaxBidTokenPercentages)
+	{
+		EmployeeAgent.preferredDeskMaxBidTokenPercentages = preferredDeskMaxBidTokenPercentages;		
+	}
+	
+	public float[] getAllDeskMaxBidTokenParts()
+	{
+		return allDeskMaxBidTokenParts;
 	}
 	
 	public int getAmountOfMoney() {
@@ -77,12 +88,8 @@ public class EmployeeAgent extends Agent{
 		this.state = state;
 	}
 
-	public AID[] getPreferredDesksAIDs() {
-		return preferredDesksAIDs;
-	}
-
-	public void setPreferredDesksAIDs(AID[] preferredDesksIndices) {
-		this.preferredDesksAIDs = preferredDesksIndices;
+	public static void setPreferredDeskMaxBidTokenPercentages(int[] preferredDeskMaxBidTokenPercentages){
+		EmployeeAgent.preferredDeskMaxBidTokenPercentages = preferredDeskMaxBidTokenPercentages;
 	}
 
 	public AID[] getAllDesks() {

@@ -1,5 +1,7 @@
 package boot;
 
+import java.util.Arrays;
+
 import agents.EmployeeAgent;
 import jade.core.AID;
 import jade.core.Profile;
@@ -37,7 +39,7 @@ public class MobileDeskReservationBoot {
 		int preferenceNumber = air.getPreferenceNumber();
 		int deskCount = air.getDeskCount();
 		int employeeCount = air.getEmployeeCount();
-		int preferredDeskMaxPrices[] = air.getPreferredDeskMaxPrices();
+		int preferredDesksMaxBidTokenPercentages[] = air.getPreferredDeskMaxBidTokenPercentages();
 		int employeePreferences[][] = air.getEmployeePreferences();
 		int employeeTokens[] = air.getEmployeeTokens();
 	    
@@ -51,7 +53,7 @@ public class MobileDeskReservationBoot {
 		
 	    deskArgs[0] = allDesks;
 	    
-	    EmployeeAgent.setMaxDeskPrices(preferredDeskMaxPrices);
+	    EmployeeAgent.setPreferredDeksMaxBidTokenPercentages(preferredDesksMaxBidTokenPercentages);
 	    
 	    /*-------------------------
 	     * Tworzenie agentow biurek
@@ -79,9 +81,8 @@ public class MobileDeskReservationBoot {
 	     *------------------------------*/
 	    for(int i=0; i < employeeCount; i++)
 	    {
-	    	System.out.println("EmployeeCount " + employeeCount + " Employee numero " + i);
 	    	
-		    employeeArgs[0] = deducePreferredDeskAIDs(allDesks, employeePreferences[i]);
+		    employeeArgs[0] = Arrays.stream(employeePreferences[i]).boxed().toArray(Integer[]::new);
 		    employeeArgs[1] = allDesks;
 		    employeeArgs[2] = employeeTokens[i];
 	    	

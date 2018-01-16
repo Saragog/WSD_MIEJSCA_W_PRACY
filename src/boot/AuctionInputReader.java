@@ -21,7 +21,7 @@ public class AuctionInputReader
 	private int preferenceNumber;
 	private int deskCount;
 	private int employeeCount;
-	private int preferredDeskMaxPrices[];
+	private int preferredDeskMaxBidTokenPercentages[];
 	private int employeePreferences[][];
 	private int employeeTokens[];
 
@@ -31,7 +31,7 @@ public class AuctionInputReader
 			FileReader fr = new FileReader(pathToInputFile);
 			BufferedReader br = new BufferedReader(fr);
 			preferenceNumber = Integer.parseInt(br.readLine());
-			preferredDeskMaxPrices = parseIntArray(br.readLine().split(" "));
+			preferredDeskMaxBidTokenPercentages = parseIntArray(br.readLine().split(" "));
 			deskCount = Integer.parseInt(br.readLine());
 			employeeCount = Integer.parseInt(br.readLine());
 			employeePreferences = new int[employeeCount][];
@@ -44,8 +44,19 @@ public class AuctionInputReader
 		}
 		catch (IOException e)
 		{
-			// TODO ustalenie domyslnych danych
-			e.printStackTrace();
+			// Default input data for algorythm
+			
+			preferenceNumber = 4;
+			deskCount = 4;
+			employeeCount = 2;
+			preferredDeskMaxBidTokenPercentages = new int[]{100, 75, 50, 25};
+			employeePreferences = new int[][] {{1, 2, 3, 4}, {2, 1, 3, 4}};
+			employeeTokens = new int[] {100, 100};
+			
+			System.out.println("______________________________________________________________");
+			System.out.println("There was a problem reading input data from specified file !!!");
+			System.out.println("Default input values were used !!!");
+			System.out.println("______________________________________________________________");
 		}		
 	}
 	
@@ -66,8 +77,8 @@ public class AuctionInputReader
 		return employeeCount;
 	}
 
-	public int[] getPreferredDeskMaxPrices() {
-		return preferredDeskMaxPrices;
+	public int[] getPreferredDeskMaxBidTokenPercentages() {
+		return preferredDeskMaxBidTokenPercentages;
 	}
 
 	public int[][] getEmployeePreferences() {
