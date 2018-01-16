@@ -43,7 +43,7 @@ public class MobileDeskReservationBoot {
 		int employeePreferences[][] = air.getEmployeePreferences();
 		int employeeTokens[] = air.getEmployeeTokens();
 	    
-	    Object[] employeeArgs = new Object[3];						//liczba argumentow odbieranych przez pracownika
+	    Object[] employeeArgs; 				//liczba argumentow odbieranych przez pracownika
 	    Object[] deskArgs = new Object[1];
 	    AID[] allDesks = new AID[deskCount];						// identyfikatory biurek 
 	    AID[] preferredDesksIndices = new AID[preferenceNumber];	// identyfikatory biurek preferowanych przez pracownika	    
@@ -81,7 +81,7 @@ public class MobileDeskReservationBoot {
 	     *------------------------------*/
 	    for(int i=0; i < employeeCount; i++)
 	    {
-	    	
+	    	employeeArgs = new Object[3];	
 		    employeeArgs[0] = Arrays.stream(employeePreferences[i]).boxed().toArray(Integer[]::new);
 		    employeeArgs[1] = allDesks;
 		    employeeArgs[2] = employeeTokens[i];
