@@ -33,12 +33,11 @@ public class EmployeeAgent extends Agent{
 		
 		// TODO LEKKIE ZMIANY W KOLEJNOSCI ARGUMENTOW ???
 		
-		System.out.println("WTF HAPPENED ... " + Arrays.toString((Integer[])args[0]) + getLocalName());
 		
 		allDesks = (AID[])args[1];
 		deduceAllDeskMaxBidTokenParts(args[0]);
 		amountOfMoney = (int)args[2];
-		System.out.println(allDeskMaxBidTokenParts);
+		//System.out.println(allDeskMaxBidTokenParts);
 
 		desksPrices = new HashMap<AID, Price> ();
 		
