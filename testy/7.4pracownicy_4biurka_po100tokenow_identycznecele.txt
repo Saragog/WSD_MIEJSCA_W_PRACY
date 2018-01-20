@@ -1,0 +1,19 @@
+4
+100 75 50 25
+4
+4
+1 2 3 4
+100
+1 2 3 4
+100
+1 2 3 4
+100
+1 2 3 4
+100
+
+//pierwszy aktywny pracownik wykupuje preferowane biurko za 25+e
+//drugi aktywny pracownik wykupuje drugie preferowane biurko za 2e
+//trzeci aktywny pracownik wykupuje preferowane biurko za 25+3e
+//pierwszy lub czwarty aktywny pracownik wykupuje drugie preferowane biurko za 25+4e
+//...
+//zapêtlenie w przypadku e=0?

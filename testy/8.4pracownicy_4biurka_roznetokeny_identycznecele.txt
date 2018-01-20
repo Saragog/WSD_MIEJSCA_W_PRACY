@@ -1,0 +1,14 @@
+4
+100 75 50 25
+4
+4
+1 2 3 4
+80
+1 2 3 4
+60
+1 2 3 4
+40
+1 2 3 4
+20
+
+//gdy kurz bitwy opadnie, powinno byæ dla pracownika o numerze x biurko o numerze x
