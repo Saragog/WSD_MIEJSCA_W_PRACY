@@ -1,0 +1,13 @@
+4
+100 75 50 25
+4
+2
+1 2 3 4
+100
+1 2 3 4
+100
+
+//oczekujemy wykupienia biurka 1/2 za ceny po 25+e/2e
+//pracownik pierwszy zabiduje biurko pierwsze za cenê 25+e
+//pracownik biduj¹cy jako drugi (o ile ma aktualne dane) zabiduje biurko drugie za cenê 2e
+//mozliwosc wiecej niz 2 bidow, gdy pracownik biduj¹cy jako drugi ma przestarza³e dane, wtedy zabiduje biurko pierwsze za 25+e, nastêpi odmowa, update danych i bid poprawny

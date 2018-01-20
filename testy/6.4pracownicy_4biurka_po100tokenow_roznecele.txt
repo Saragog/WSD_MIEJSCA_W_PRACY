@@ -1,0 +1,15 @@
+4
+100 75 50 25
+4
+4
+1 2 3 4
+100
+2 3 4 1
+100
+3 4 1 2
+100
+4 1 2 3
+100
+
+//oczekujemy ¿e pracownicy powykupuj¹ preferowane biurka za ceny po 25+e
+//ale: w przypadku gdy inny pracownik wykupi³ ju¿ drugie pod wzglêdem preferencji biurko (a obecnie rozwa¿any pracownik ma o tym aktualne dane) obecnie rozwa¿any pracownik wykupuje preferowane biurko za cenê 2e
