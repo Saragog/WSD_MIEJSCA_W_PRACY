@@ -202,7 +202,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 	}
 	
 	private void incrementDesksTaken(DeskAgent deskAgent){
-		System.out.println(deskAgent.getDesksTaken()+deskAgent.getLocalName());
+		
 		deskAgent.setDesksTaken(deskAgent.getDesksTaken() + 1);
 	}
 	

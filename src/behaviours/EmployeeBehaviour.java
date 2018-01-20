@@ -149,7 +149,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 					{
 						if ( msg.getContent().equals("desk_overtaken"))
 						{
-							System.out.println("Przebicie stolka");
+							//System.out.println("Przebicie stolka");
 							((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.HAS_NO_DESK_TAKEN);
 						}
 						else if(msg.getContent().equals("End"))
