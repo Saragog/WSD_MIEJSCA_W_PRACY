@@ -252,15 +252,6 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			sendMessage(deskToBidAID, messageContents, ACLMessage.PROPOSE);
 			((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.WAITING_FOR_BID_RESPONSE);
 		}
-		//else 
-		//	((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.NOT_ENOUGH_MONEY_TO_BID_PREFERRED_DESK); // not enough money
-		
-		//System.out.println("Jol, jol, Jestem pracownik: " + name);
-		//System.out.println("Jestem prosty czlowiek i dla mnie w deskach podoba sie zysk z ich posiadania");
-		//for (int x = 0; x < desks.length; x++)
-		//System.out.println("Najbardziej podoba mi sie deska " + deskToBidAID.getLocalName() + " bo ma takie fajne atrybuty, wiec zaplace za nia " + proposedPrice.toString());
-		
-		//System.out.println("Koncze bidowanie pracownik: " + ((EmployeeAgent)myAgent).getLocalName());
 	}
 		
 	private DataForCalculatingBidValue preparePreferredDesksData()

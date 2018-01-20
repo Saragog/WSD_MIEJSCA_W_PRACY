@@ -24,7 +24,6 @@ public class EmployeeAgent extends Agent{
 	private float[] allDeskMaxBidTokenParts;
 	private Map<AID, Price> desksPrices;
 	
-	public static final int NUMBER_OF_PREFERRED_DESKS = 4;
 	
 	protected void setup() { // Jako 1 argument AID z preferowanymi stolami 2 argument to AID wszystkich biurek
 		
