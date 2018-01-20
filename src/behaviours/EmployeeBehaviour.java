@@ -154,7 +154,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 						}
 						else if(msg.getContent().equals("End"))
 						{
-							System.out.println( myAgent.getLocalName() +" wygrywa " + msg.getSender().getLocalName() );
+							System.out.println( myAgent.getLocalName() +"\t wygrywa  " + msg.getSender().getLocalName() );
 							((EmployeeAgent)myAgent).setEmployeeState(EmployeeState.END);
 						}
 					}

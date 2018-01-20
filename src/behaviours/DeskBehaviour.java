@@ -87,7 +87,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 						case FREE:
 						{
 							Price price = getPrice(content);
-							System.out.println(myDeskAgent.getDesksTaken() + " FREE "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +", " + price.epsilons + " od " + msg.getSender().getLocalName());
+							//System.out.println("FREE "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +", " + price.epsilons + " od " + msg.getSender().getLocalName());
 							
 							if(auction(myDeskAgent, sender, price)) {
 								myDeskAgent.setDeskState(DeskState.TAKEN);	//zmiana stanu
@@ -105,7 +105,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 						case TAKEN:
 						{
 							Price price = getPrice(content);
-							//System.out.println(myDeskAgent.getDesksTaken() +" TAKEN "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +", " + price.epsilons + " od " + msg.getSender().getLocalName());
+							//System.out.println("TAKEN "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +", " + price.epsilons + " od " + msg.getSender().getLocalName());
 							auction(myDeskAgent, sender, price);
 						}
 					};
