@@ -36,9 +36,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 		private Integer[] deskIndexesInOrderByGains; 
 		
 		public DataForCalculatingBidValue(AID[] deskAIDs, HashMap<AID, Price> mapOfDeskPrices)
-		{
-			// TODO tutaj duuuuuzo zmian beeedzie nie wiem ile ale duuuzo :( ...
-						
+		{						
 			float[] allDeskMaxBidTokenParts = ((EmployeeAgent)myAgent).getAllDeskMaxBidTokenParts();
 			desksCount = allDeskMaxBidTokenParts.length;
 
@@ -98,6 +96,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			int bestDeskIndex = deskIndexesInOrderByGains[desksCount - 1], secondDeskIndex = deskIndexesInOrderByGains[desksCount - 2];
 			int bidTokens = deskGains[bestDeskIndex].tokens - deskGains[secondDeskIndex].tokens;
 			int bidEpsilons = deskGains[bestDeskIndex].epsilons - deskGains[secondDeskIndex].epsilons + 1;
+			
 			
 			deskToBidAID = deskAIDs[bestDeskIndex];
 			
