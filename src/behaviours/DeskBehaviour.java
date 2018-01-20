@@ -46,12 +46,15 @@ public class DeskBehaviour extends CyclicBehaviour{
 				 * 		- Sprawdzenie czy ten EmployeeAgent jest juz znany.*/
 				if(performative == ACLMessage.INFORM_REF && content.equals("priceQuestion") )
 				{
+					String response;
 
-
-					System.out.println(myDeskAgent.getLocalName() + " Obecna cena to: " + myDeskAgent.getCurrentPrice().tokens +", "+myDeskAgent.getCurrentPrice().epsilons);
-										
+					if(myDeskAgent.getCurrentPrice().epsilons > 100)
+						response = "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens + 1)+":"+0;
+					else
+						response = "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens)+":"+Integer.toString(myDeskAgent.getCurrentPrice().epsilons);
+					System.out.println(response);
 					sendMessage(sender,
-							    "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens)+":"+Integer.toString(myDeskAgent.getCurrentPrice().epsilons),
+							    response,
 							    ACLMessage.INFORM);
 
 					
