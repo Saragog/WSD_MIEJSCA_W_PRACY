@@ -47,7 +47,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			allDesksCount = deskAIDs.length;
 			Price[] deskGains = calculateDeskGains(allDeskMaxBidTokenParts, deskPrices); // wartosci Z
 			
-			System.out.println(Arrays.toString(deskGains));
+			//System.out.println(Arrays.toString(deskGains));
 			
 			// DO TAD PRZEROBIC BO TO ZAMIANA MAPY NA TABLICE CO JEST SLABE
 			
