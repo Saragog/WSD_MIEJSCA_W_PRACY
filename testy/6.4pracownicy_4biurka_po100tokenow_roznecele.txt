@@ -13,3 +13,8 @@
 
 //oczekujemy ¿e pracownicy powykupuj¹ preferowane biurka za ceny po 25+e
 //ale: w przypadku gdy inny pracownik wykupi³ ju¿ drugie pod wzglêdem preferencji biurko (a obecnie rozwa¿any pracownik ma o tym aktualne dane) obecnie rozwa¿any pracownik wykupuje preferowane biurko za cenê 2e
+// OK
+// 1 wygrywa 1
+// 2 wygrywa 2
+// 3 wygrywa 3
+// 4 wygrywa 4

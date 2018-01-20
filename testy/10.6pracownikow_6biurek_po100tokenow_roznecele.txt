@@ -1,7 +1,7 @@
 4
 100 75 50 25
-4
-4
+6
+6
 6 5 4 3
 100
 5 4 3 2
@@ -17,3 +17,10 @@
 
 //oczekujemy ¿e pracownicy powykupuj¹ preferowane biurka za ceny po 25+e
 //ale: w przypadku gdy inny pracownik wykupi³ ju¿ drugie pod wzglêdem preferencji biurko (a obecnie rozwa¿any pracownik ma o tym aktualne dane) obecnie rozwa¿any pracownik wykupuje preferowane biurko za cenê 2e
+// OK
+// 1 wygrywa 6
+// 2 wygrywa 5
+// 3 wygrywa 4
+// 4 wygrywa 3
+// 5 wygrywa 2
+// 6 wygrywa 1

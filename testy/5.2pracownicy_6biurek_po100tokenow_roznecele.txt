@@ -8,3 +8,6 @@
 100
 
 //oczekujemy wykupienia biurka 6 i 1 za ceny po 25+e, brak klotni
+// OK
+// 1 wygrywa 6
+// 2 wygrywa 1

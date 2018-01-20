@@ -11,3 +11,6 @@
 //nastêpnie:
 //w pierwszym przypadku pracownik 2 zabiduje biurko 2 za 2e albo (w przypadku nieaktualnych danych) zabiduje biurko 1 za 10+e, odniesie pora¿kê, uaktualni dane i wykona opcjê przed albo -> koniec
 //w drugim przypadku pracownik 1 zabiduje biurko 1 za 20+e albo (w przypadku przestarza³ych danych) za 30+2e, po czym (w obu tych przypadkach) pracownik 2 zabiduje biurko 2 za 10+e
+// OK
+// 1 wygrywa 1
+// 2 wygrywa 2

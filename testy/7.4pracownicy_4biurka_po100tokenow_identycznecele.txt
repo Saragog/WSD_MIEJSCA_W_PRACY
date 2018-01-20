@@ -17,3 +17,8 @@
 //pierwszy lub czwarty aktywny pracownik wykupuje drugie preferowane biurko za 25+4e
 //...
 //zapêtlenie w przypadku e=0?
+// OK
+// 1 wygrywa 3
+// 2 wygrywa 1
+// 3 wygrywa 2
+// 4 wygrywa 4

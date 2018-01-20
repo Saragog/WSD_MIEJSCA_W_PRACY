@@ -10,3 +10,8 @@
 100
 1 4 3 2
 100
+// OK
+// 1 wygrywa 3
+// 2 wygrywa 2
+// 3 wygrywa 1
+// 4 wygrywa 4

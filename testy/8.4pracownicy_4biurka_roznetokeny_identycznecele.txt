@@ -12,3 +12,8 @@
 20
 
 //gdy kurz bitwy opadnie, powinno byæ dla pracownika o numerze x biurko o numerze x
+// OK
+// 1 wygrywa 1
+// 2 wygrywa 2
+// 3 wygrywa 3
+// 4 wygrywa 4

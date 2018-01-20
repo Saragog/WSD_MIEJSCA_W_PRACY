@@ -10,3 +10,6 @@
 //oczekujemy ze pierwszy aktywny pracownik (1/2) wykupi biurko (1/2) za 25+e
 //drugi aktywny pracownik wykupi biurko, które stoi na drugim u niego miejscu preferencji za 2e
 //zamiast tego w przypadku gdy drugi aktywny pracownik ma przestarza³e dane wykupi on biurko drugie wzglêdem jego preferencji za 25+e
+// OK
+// 1 wygrywa 1
+// 2 wygrywa 2
