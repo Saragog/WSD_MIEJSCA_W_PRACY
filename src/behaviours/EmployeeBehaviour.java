@@ -24,7 +24,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 	private int allDesksCount;
 	private int desksCount;
 	
-	// private static final int EPSILON = 1; // TODO aktualnie nie wykorzystany omowic to co mowil Palka
+	
 	
 	private class DataForCalculatingBidValue
 	{		
@@ -47,7 +47,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			allDesksCount = deskAIDs.length;
 			Price[] deskGains = calculateDeskGains(allDeskMaxBidTokenParts, deskPrices); // wartosci Z
 			
-			//System.out.println(Arrays.toString(deskGains));
+			
 			
 			// DO TAD PRZEROBIC BO TO ZAMIANA MAPY NA TABLICE CO JEST SLABE
 			
@@ -70,28 +70,7 @@ public class EmployeeBehaviour extends CyclicBehaviour{
 			
 			//System.out.println("Indeksowanie stolow po sortowaniu ich po ich Z: " + Arrays.toString(deskIndexesInOrderByGains));
 			
-			// 1 2 3 4
-			// 100
-			// 2 1 3 4
-			// 100
-			//
-			// 2gi agent kupil biurko 2 za 25 + E
-			// 
-			// teraz stan jest taki:
-			// 0 25+E 0 0
-			// 100 75 50 25
-			// 100 50-E 50 25
-			// 100 50 50-E 25
-			// 100 - 50 + E
 			
-			// DO WYPISYWANIA POTEM WYRZUCIC !!! //
-			
-			//Price best_p =
-			//Price second_p = 
-			
-			//System.out.println("Najlepsze biurko" + );
-			
-			// DO TAD WYPISYWANIE POTEM WYRZUCIC !!! //
 			
 			int bestDeskIndex = deskIndexesInOrderByGains[desksCount - 1], secondDeskIndex = deskIndexesInOrderByGains[desksCount - 2];
 			int bidTokens = deskGains[bestDeskIndex].tokens - deskGains[secondDeskIndex].tokens;

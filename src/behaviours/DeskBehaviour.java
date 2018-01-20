@@ -38,9 +38,9 @@ public class DeskBehaviour extends CyclicBehaviour{
 				performative = msg.getPerformative();
 				sender = msg.getSender();
 				
-//				System.out.println(myAgent.getLocalName() + " otrzymał wiadomość: \n \tContent: " +content+ "\n \tPerformatywa: " + performative + "\n");
+
 				
-				/*Funkcje 1,2,3,4 wykonywane sa niezaleznie od stanu agenta Desk.*/
+				/*Funkcje 1,2,3 wykonywane sa niezaleznie od stanu agenta Desk.*/
 				
 				/*	1.	- Odpowiedz na pytanie o aktualna cene.
 				 * 		- Sprawdzenie czy ten EmployeeAgent jest juz znany.*/
@@ -48,11 +48,9 @@ public class DeskBehaviour extends CyclicBehaviour{
 				{
 					String response;
 
-					if(myDeskAgent.getCurrentPrice().epsilons > 100)
-						response = "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens + 1)+":"+0;
-					else
-						response = "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens)+":"+Integer.toString(myDeskAgent.getCurrentPrice().epsilons);
-					//System.out.println(response);
+					myDeskAgent.getCurrentPrice().normalizeEpsilons();
+					response = "price:"+Integer.toString(myDeskAgent.getCurrentPrice().tokens)+":"+Integer.toString(myDeskAgent.getCurrentPrice().epsilons);
+					
 					sendMessage(sender,
 							    response,
 							    ACLMessage.INFORM);
@@ -63,41 +61,34 @@ public class DeskBehaviour extends CyclicBehaviour{
 				
 				/*2. Zapisanie inforamcji o tym, ze jedno z biorek zostalo zajete.*/
 				else if(performative == ACLMessage.INFORM && content.equals("idDeskTaken") && !(sender.getName().equals(myDeskAgent.getName())))
-					incrementDesksTaken(myDeskAgent);
+					incrementDesksTaken(myDeskAgent);				
 				
-				/*3. Obsluga sygnalu zakonczenia aukcji.*/ //NIEPOTRZEBNE?
-	/*			else if(performative == ACLMessage.INFORM && content.equals("End")) {
-					//TODO	
-				}*/
 				
-				/*	4.	Zapisanie inforamcji o nowym Employee, ktory dolonczyl� do licytacji.
+				/*	3.	Zapisanie inforamcji o nowym Employee, ktory dolonczyl do licytacji.
 				 * 		Odpowiedz IdACK do nadawcy.*/
 				else if(performative == ACLMessage.INFORM) {
 					String[] parts = content.split(":");
-					//switch (parts[0]) {
+					
 						if( parts[0].equals("employeeId")){
-							//AID employeeAID = new AID();
-							//employeeAID.setName(parts[1]);
+						
 							
-							addIfIsEmployeeUnknown(myDeskAgent, parts[1]);
-							//addEmployeeToList(employeeAID, myDeskAgent);	//dodanie Employee do listy agenta Desk
+							addIfIsEmployeeUnknown(myDeskAgent, parts[1]);//dodanie Employee do listy agenta Desk
 							sendMessage(sender, "IdACK", ACLMessage.CONFIRM);	//potwierdzenie  odebrania inforamcji o nowym employee
 						
 						}	
 				}
 				
-				/*5. Zachowanie zalezne od stanu agenta Desk.*/
+				/*4. Zachowanie zalezne od stanu agenta Desk.*/
 				else if(performative == ACLMessage.PROPOSE ) {
-					//System.out.println(agentName + " otrzymano� propozycje!");
+					
 					switch (agentState){
 					
-					/*5.1 Aukcja w stanie FREE*/
+					/* Aukcja w stanie FREE*/
 						case FREE:
 						{
 							Price price = getPrice(content);
 							System.out.println(myDeskAgent.getDesksTaken() + " FREE "+myAgent.getLocalName() + " otrzymano� propozycje:  " +price.tokens +", " + price.epsilons + " od " + msg.getSender().getLocalName());
-							//boolean win = auction(myDeskAgent, sender, price);
-							//System.out.println("Biurko otrzymalo wiadomosc ze ktos chce bidowac je za: " + price);
+							
 							if(auction(myDeskAgent, sender, price)) {
 								myDeskAgent.setDeskState(DeskState.TAKEN);	//zmiana stanu
 								incrementDesksTaken(myDeskAgent);	// inkrementacja #desksTaken
@@ -110,7 +101,7 @@ public class DeskBehaviour extends CyclicBehaviour{
 								
 							break;							
 						}
-						/*5.2 Aukcja w stanie TAKEN*/
+						/* Aukcja w stanie TAKEN*/
 						case TAKEN:
 						{
 							Price price = getPrice(content);
@@ -121,8 +112,8 @@ public class DeskBehaviour extends CyclicBehaviour{
 				}
 			}
 			
-			/*6. Sprawdzenie warunku zakonczenia aukcji.
-			 * 	 Jesli warunek został spełniony aukcja zostaje zakończona*/
+			/*5. Sprawdzenie warunku zakonczenia aukcji.
+			 * 	 Jesli warunek zostal spelniony aukcja zostaje zakonczona*/
 			if(shouldAuctionEnd(myDeskAgent))
 				endAuction(myDeskAgent);
 		}
@@ -225,7 +216,6 @@ public class DeskBehaviour extends CyclicBehaviour{
 	
 	private void endAuction(DeskAgent deskAgent){
 		
-		System.out.println(deskAgent.getLocalName()+" End Auction! "+ deskAgent.getDesksTaken() +"/" + deskAgent.getAmountOfEmployees());
 		sendMessage(deskAgent.getWinningEmployee(),
 			    "End",
 			    ACLMessage.INFORM);

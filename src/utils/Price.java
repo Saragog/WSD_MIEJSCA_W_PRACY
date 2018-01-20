@@ -5,7 +5,7 @@ public class Price implements Comparable<Price>{
 	
 	public int tokens = 0;
 	public int epsilons = 0;
-	
+	public static int maxEps = 100;
 	
 	@Override
 	public int compareTo(Price o) {
@@ -45,6 +45,14 @@ public class Price implements Comparable<Price>{
 	public String toString() {
 		
 		return Integer.toString(this.tokens) +"_"+ this.epsilons;
+	}
+	
+	public void normalizeEpsilons() {
+		while(epsilons >= maxEps)
+		{
+			epsilons = epsilons - maxEps;
+			tokens++;
+		}
 	}
 
 	
