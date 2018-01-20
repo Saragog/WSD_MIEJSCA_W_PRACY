@@ -199,13 +199,15 @@ public class DeskBehaviour extends CyclicBehaviour{
 	private void sendMessageToList(AID[] agentList, String content, int performative) {
 		
 		ACLMessage messageToBeSent = new ACLMessage(performative);
-		messageToBeSent.setContent(content);		
+			messageToBeSent.setContent(content);		
 	
 		for(AID receiver: agentList) {
-			messageToBeSent.addReceiver(receiver);	//Czy ta funkcja nadpisuje?
-			myAgent.send(messageToBeSent);
+			
+			
+			messageToBeSent.addReceiver(receiver);	
+			
 		}
-		
+		myAgent.send(messageToBeSent);
 	}
 	
 	private void incrementDesksTaken(DeskAgent deskAgent){
