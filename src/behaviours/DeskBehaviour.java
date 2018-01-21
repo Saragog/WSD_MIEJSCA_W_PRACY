@@ -96,8 +96,6 @@ public class DeskBehaviour extends CyclicBehaviour{
 						{
 							Price price = getPrice(content);
 							System.out.println(myDeskAgent.getDesksTaken() + " FREE "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +", " + price.epsilons + " od " + msg.getSender().getLocalName());
-							//boolean win = auction(myDeskAgent, sender, price);
-							//System.out.println("Biurko otrzymalo wiadomosc ze ktos chce bidowac je za: " + price);
 							if(auction(myDeskAgent, sender, price)) {
 								myDeskAgent.setDeskState(DeskState.TAKEN);	//zmiana stanu
 								incrementDesksTaken(myDeskAgent);	// inkrementacja #desksTaken
@@ -114,7 +112,6 @@ public class DeskBehaviour extends CyclicBehaviour{
 						case TAKEN:
 						{
 							Price price = getPrice(content);
-							//System.out.println(myDeskAgent.getDesksTaken() +" TAKEN "+myAgent.getLocalName() + " otrzymano‚ propozycje:  " +price.tokens +", " + price.epsilons + " od " + msg.getSender().getLocalName());
 							auction(myDeskAgent, sender, price);
 						}
 					};
@@ -201,22 +198,13 @@ public class DeskBehaviour extends CyclicBehaviour{
 		ACLMessage messageToBeSent = new ACLMessage(performative);
 			messageToBeSent.setContent(content);		
 	
-		for(AID receiver: agentList) {
-			
-			
+		for(AID receiver: agentList)
 			messageToBeSent.addReceiver(receiver);	
-			
-		}
 		myAgent.send(messageToBeSent);
 	}
 	
 	private void incrementDesksTaken(DeskAgent deskAgent){
-		System.out.println(deskAgent.getDesksTaken()+deskAgent.getLocalName());
 		deskAgent.setDesksTaken(deskAgent.getDesksTaken() + 1);
-	}
-	
-	private void addEmployeeToList(String employee, DeskAgent deskAgent){
-		deskAgent.addEmployeeToList(employee);
 	}
 	
 	private boolean shouldAuctionEnd(DeskAgent deskAgent){

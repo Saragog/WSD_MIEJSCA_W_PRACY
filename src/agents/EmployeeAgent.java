@@ -22,38 +22,30 @@ public class EmployeeAgent extends Agent{
 	private AID[] allDesks;
 	private static int[] preferredDeskMaxBidTokenPercentages;
 	private float[] allDeskMaxBidTokenParts;
-	private Map<AID, Price> desksPrices;
+	private Map<AID, Price> mapOfDeskPrices;
+	private int deskCount;
 	
 	public static final int NUMBER_OF_PREFERRED_DESKS = 4;
 	
-	protected void setup() { // Jako 1 argument AID z preferowanymi stolami 2 argument to AID wszystkich biurek
+	protected void setup() { // Jako 1 argument to AID wszystkich biurek 2 argument AID z preferowanymi stolami 3 argument to ilosc pieniedzy dla pracownika 
 		
 		Object[] args = getArguments();
-				
-		
-		// TODO LEKKIE ZMIANY W KOLEJNOSCI ARGUMENTOW ???
-		
-		
-		allDesks = (AID[])args[1];
-		deduceAllDeskMaxBidTokenParts(args[0]);
+		allDesks = (AID[])args[0];
+		deskCount = allDesks.length;
+		deduceAllDeskMaxBidTokenParts(args[1]);
 		amountOfMoney = (int)args[2];
-		//System.out.println(allDeskMaxBidTokenParts);
-
-		desksPrices = new HashMap<AID, Price> ();
 		
+		mapOfDeskPrices = new HashMap<AID, Price> ();		
 		this.state = EmployeeState.HAS_NO_DESK_TAKEN;
-		
-		
 		addBehaviour(new behaviours.EmployeeBehaviour());
 	}
 	
 	private void deduceAllDeskMaxBidTokenParts(Object preferedDeskIndices)
 	{
     	System.out.println("Prefered indices " + Arrays.toString((Integer[])preferedDeskIndices) + getLocalName());
-		
-		int len = allDesks.length, position;
-		allDeskMaxBidTokenParts = new float[len];
-		for (int deskIndex = 0; deskIndex < len; deskIndex++)
+		int position;
+		allDeskMaxBidTokenParts = new float[deskCount];
+		for (int deskIndex = 0; deskIndex < deskCount; deskIndex++)
 		{
 			position = Arrays.asList((Integer[])preferedDeskIndices).indexOf(Integer.valueOf(deskIndex+1));
 			if (position == -1) allDeskMaxBidTokenParts[deskIndex] = (float)0.0;
@@ -99,12 +91,16 @@ public class EmployeeAgent extends Agent{
 		this.allDesks = allDesks;
 	}
 
-	public Map<AID, Price> getDesksPrices() {
-		return desksPrices;
+	public Map<AID, Price> getMapOfDeskPrices() {
+		return mapOfDeskPrices;
 	}
-
-	public void setDesksPrices(Map<AID, Price> desksPrices) {
-		this.desksPrices = desksPrices;
+	
+	public Price[] getDeskPricesAsArray()
+	{
+		Price[] deskPrices = new Price[deskCount];
+		for (int index = 0; index < deskCount; index++)
+			deskPrices[index] = mapOfDeskPrices.get(allDesks[index]);
+		return deskPrices;
 	}
 
 	public static long getSerialversionuid() {

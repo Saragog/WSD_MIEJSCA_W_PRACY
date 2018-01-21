@@ -82,8 +82,8 @@ public class MobileDeskReservationBoot {
 	    for(int i=0; i < employeeCount; i++)
 	    {
 	    	employeeArgs = new Object[3];	
-		    employeeArgs[0] = Arrays.stream(employeePreferences[i]).boxed().toArray(Integer[]::new);
-		    employeeArgs[1] = allDesks;
+	    	employeeArgs[0] = allDesks;
+		    employeeArgs[1] = Arrays.stream(employeePreferences[i]).boxed().toArray(Integer[]::new);
 		    employeeArgs[2] = employeeTokens[i];
 	    	
 	    	AgentController employeeAgentController;
