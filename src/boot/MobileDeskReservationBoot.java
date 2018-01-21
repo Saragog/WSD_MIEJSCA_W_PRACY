@@ -10,6 +10,7 @@ import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
+import utils.Price;
 
 /*
  * 4      				- liczba preferencji pojedynczego pracownika
@@ -39,6 +40,8 @@ public class MobileDeskReservationBoot {
 		int preferenceNumber = air.getPreferenceNumber();
 		int deskCount = air.getDeskCount();
 		int employeeCount = air.getEmployeeCount();
+		Price.maxEps = employeeCount;
+		
 		int preferredDesksMaxBidTokenPercentages[] = air.getPreferredDeskMaxBidTokenPercentages();
 		int employeePreferences[][] = air.getEmployeePreferences();
 		int employeeTokens[] = air.getEmployeeTokens();
@@ -52,6 +55,7 @@ public class MobileDeskReservationBoot {
 			allDesks[i] = new AID("Biurko"+(i+1),AID.ISLOCALNAME);
 		
 	    deskArgs[0] = allDesks;
+	  
 	    
 	    EmployeeAgent.setPreferredDeksMaxBidTokenPercentages(preferredDesksMaxBidTokenPercentages);
 	    
