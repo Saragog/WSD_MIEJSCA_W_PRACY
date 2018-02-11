@@ -31,9 +31,18 @@ public class MobileDeskReservationBoot {
 	{
 		Runtime runtime = Runtime.instance();
 	    Profile profile = new ProfileImpl();
+	    
 	    profile.setParameter(Profile.MAIN_HOST, "localhost");
-	    profile.setParameter(Profile.GUI, "true");
+	    //profile.setParameter(Profile.GUI, "true");
+	    
 	    ContainerController containerController = runtime.createMainContainer(profile);
+	    
+	    // TODO sprawdzenie dzialania generatora danych wejsciowych
+	    // nazwa pliku | liczba preferencji | liczba biurek | liczba pracownikow
+	    
+	    // TODO narazie jest nie_singleton potem zrobic by to byl singleton i w ogole sie dowiedziec jak to sie robi
+	    InputDataGenerator inputDataGenerator = new InputDataGenerator();
+	    inputDataGenerator.generateInputFile("test.txt", 4, 2, 4);
 	    
 	    AuctionInputReader air = new AuctionInputReader(fileName);
 
